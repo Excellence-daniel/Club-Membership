@@ -1,6 +1,9 @@
 import React, {Component } from 'react'
+import {Redirect} from 'react-router-dom'
+
 import Header from '../header'
 import {db} from '../config/fire'
+
 
 class CreateClub extends Component{
     constructor(props){
@@ -12,7 +15,8 @@ class CreateClub extends Component{
             clubType : '', 
             memberLimit : null, 
             members : {}, 
-            deleted : false
+            deleted : false, 
+            redirect : false
         }
     }
 
@@ -53,6 +57,8 @@ class CreateClub extends Component{
             .then((u) => {
                 console.log(u)
                 alert("Club Created!")
+                localStorage.setItem("Club", this.state.clubName)
+                this.setState({redirect : true})
             }).catch((error) => {
                 console.log(error)
                 alert("Can't create club at the moment, please try again!")
@@ -61,6 +67,9 @@ class CreateClub extends Component{
     }
 
     render(){
+        if (this.state.redirect === true){
+            return <Redirect to = "./addMembers" />
+        }
         return (
             <div class = "col-md-12"> 
                 <div class = "col-md-12">
