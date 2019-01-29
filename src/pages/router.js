@@ -17,12 +17,12 @@ function Routerr (){
             <div> 
 
                 <Route exact path = "/" component = {LandingPage}/>
-                <Route path = "/login" component = {LoginUser}/>
-                <Route path = "/signup" component = {SignUpUser}/>
-                <Route path = "/club/viewClubs" component = {ViewClubs}/>
-                <Route path = "/club/addMembers" component = {AddMembers}/>
-                <Route path = "/club/createClub" component = {CreateClub}/>
-                <Route path = "/profile/viewProfile" component = {ViewProfile}/>
+                <Route exact path = "/login" component = {LoginUser}/>
+                <Route exact path = "/signup" component = {SignUpUser}/>
+                <Route exact path = "/club/viewClubs" component = {ViewClubs}/>
+                <Route exact path = "/club/addMembers" component = {AddMembers}/>
+                <Route exact path = "/club/createClub" component = {CreateClub}/>
+                <Route exact path = "/profile/viewProfile" component = {ViewProfile}/>
             </div>  
         </Router>
     )

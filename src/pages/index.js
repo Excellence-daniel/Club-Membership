@@ -11,19 +11,6 @@ class LandingPage extends Component{
         }
     }
 
-    // logOut = (e) => {
-    //       e.preventDefault()
-    //       fire.auth().signOut()
-    //       .then(function(){
-    //           alert("Signed Out")
-    //           localStorage.setItem("LOGIN STATUS", false")
-    //       })
-    //         this.setState({loginStatus : false, redirect :true})
-    //         console.log("Signed Out")
-
-    //     console.log("HEY")
-    //   }
-
     render(){
         return (
             <div>
