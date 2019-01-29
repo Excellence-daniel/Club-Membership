@@ -112,9 +112,10 @@ class ViewClubs extends Component {
                          </tr>
                         
                     )) :
-                        <div style = {{fontSize : '20px'}}>
-                           <center> "No Clubs Available"  </center> 
-                        </div>
+                           <p style = {{fontSize : '20px'}}>
+                            <center> "No Clubs Available" </center>  
+                           </p> 
+                        
                         }
                         </tbody>
                     </table>
