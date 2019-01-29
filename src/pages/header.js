@@ -1,13 +1,24 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+
+import {fire} from './config/fire'
 const liStyle = {
     display : 'block'
 }
 
+function logOut(){
+    fire.auth().signOut()
+    .then(function(){
+        localStorage.setItem("LOGIN", false)
+        console.log("HEY")
+    })
+    return <Redirect to = '/'/>
+}
 
-
-function Header (props){
-        if(props.loginStatus === false){
+function Header (){
+   const status = localStorage.getItem("LOGIN")
+   console.log(status)
+        if(status === true){
             return (
                 <div className = "col-md-12">
                     <div className = "col-md-4"> 
@@ -16,8 +27,8 @@ function Header (props){
                     <div className = "col-md-5"></div>
                     <div className = "col-md-3 mt-2"> 
                         <ul className = "nav nav-pills nav-fill">
-                                <Link to = "./login"> <li className = "nav-item"> LOGIN </li> </Link>
-                                <Link to = "./signup"> <li className = "nav-item"> SIGN UP </li> </Link>
+                                <Link to = "/login"> <li className = "nav-item"> LOGIN </li> </Link>
+                                <Link to = "/signup"> <li className = "nav-item"> SIGN UP </li> </Link>
                         </ul>
                     </div>
                 </div>
@@ -39,7 +50,7 @@ function Header (props){
                                         <Link to = "/club/viewClubs"><li style = {liStyle}> View Created Clubs </li></Link>
                                     </ul>
 
-                        <li> <button className = "btn btn-danger" onClick = {props.logOut}> LOG OUT </button> </li>
+                        <li> <button className = "btn btn-danger" onClick = {logOut}> LOG OUT </button> </li>
                     </ul>
                 </div>
             </div>
