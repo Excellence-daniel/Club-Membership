@@ -7,7 +7,7 @@ class LandingPage extends Component{
     constructor(props){
         super(props);
         this.state = {
-            loginStatus : false
+            //loginStatus : false
         }
     }
 
