@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 
 import Header from '../header'
 
-import {db} from '../config/fire'
+import {fire, db} from '../config/fire'
 
 class ViewProfile extends Component{
     constructor(props){
@@ -15,22 +15,33 @@ class ViewProfile extends Component{
             phone : null,
             profile : {}, 
             textBoxDisable : true, 
-            editBtn : false
+            editBtn : false, 
+            redirect : false
         }
     }
 
     componentDidMount(){
-        var user = db.collection('Users')
-        var query = user.where ('Email', '==', 'oyeniranexcellenced@gmail.com').get()
+        fire.auth().onAuthStateChanged((user) => {
+        const self = this
+        if (user){
+        var users = db.collection('Users')
+        var query = users.where ('Email', '==', user.email).get()
             .then((snapshot) => {
                 snapshot.forEach((doc,id) =>{
-                    console.log(doc.data())
+                    console.log("Doc Data: ", doc.data())
                     const prof = doc.data()
-                    this.setState({profile : doc.data(), name  : prof.Name, email : prof.Email, address : prof.Address, phone : prof.Phone, id : doc.id })
+                    self.setState({profile : doc.data(), name  : prof.Name, email : prof.Email, address : prof.Address, phone : prof.Phone, id : doc.id })
                     // alert(doc.id)
                 })
+            }).catch((error) => {
+                alert("You are not logged in, try again")
+                self.setState({redirect : true})
             })
-    }
+        } else {
+            alert("Login and try again!")
+        }
+    })
+}
 
     editProfile = () =>{
         this.setState({textBoxDisable : false, editBtn : true})
@@ -72,20 +83,24 @@ class ViewProfile extends Component{
             <div class = "col-md-12"> 
                 <Header/>
 
-                <div class = "col-md-6 mx-auto"> 
-                    <h2> Profile Information </h2>
-                    <ul class = "list-group">
-                        <li> Name : <input class = "form-control" type = "text" onChange = {this.changeName} disabled = {textBoxDisable} value = {this.state.name}/></li>
-                        <li> Email : <input class = "form-control" type = "text" onChange = {this.changeEmail} disabled = {true} value = {this.state.email}/> </li>
-                        <li> Address : <input class = "form-control" type = "text" onChange = {this.changeAddress} disabled = {textBoxDisable} value = {this.state.address}/> </li>
-                        <li> Phone Number : <input class = "form-control" type = "text" onChange = {this.changePhone} disabled = {textBoxDisable} value = {this.state.phone}/> </li>
-                        <p>
-                            <button class = "btn btn-success" disabled = {editBtn} onClick = {this.editProfile}> EDIT </button> 
-                            &nbsp; &nbsp;
-                        <button onClick = {this.updateProfile} disabled = {textBoxDisable} class = "btn btn-primary"> UPDATE </button>
-                        </p>
-                    </ul>
+                    <div class = "col-md-4"></div>                
+                    <div class = "col-md-4 mt-4 card card-body"> 
+                        <h2><center> Profile Information </center></h2>
+                        <ul class = "list-group">
+                            <li> Name : <input class = "form-control" type = "text" onChange = {this.changeName} disabled = {textBoxDisable} value = {this.state.name}/></li>
+                            <li> Email : <input class = "form-control" type = "text" onChange = {this.changeEmail} disabled = {true} value = {this.state.email}/> </li>
+                            <li> Address : <input class = "form-control" type = "text" onChange = {this.changeAddress} disabled = {textBoxDisable} value = {this.state.address}/> </li>
+                            <li> Phone Number : <input class = "form-control" type = "text" onChange = {this.changePhone} disabled = {textBoxDisable} value = {this.state.phone}/> </li>
+                            <p class = "mt-3">
+                                <center>
+                                    <button class = "btn btn-success" disabled = {editBtn} onClick = {this.editProfile}> EDIT </button> 
+                                    &nbsp; &nbsp;
+                                <   button onClick = {this.updateProfile} disabled = {textBoxDisable} class = "btn btn-success"> UPDATE </button>
+                                </center>
+                            </p>
+                        </ul>
                 </div>
+                <div className = "col-md-4"></div>
             </div>
         )
     }
