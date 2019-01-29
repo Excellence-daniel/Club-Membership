@@ -87,8 +87,9 @@ class EditClub extends Component{
                         <label> Members Limit</label>
                         <input type = "number" onChange = {this.handleMemberLimit} value = {this.state.membersLimit} class = "form-control"/>
                     </p>
+                    
                     <p>
-                        <button class = "btn btn-success btn block"> SAVE </button>
+                        <button class = "btn btn-success btn-block" onClick = {this.updateClubDetails}> SAVE </button>
                     </p>
                </div>
                <div className = "col-md-4"></div>
