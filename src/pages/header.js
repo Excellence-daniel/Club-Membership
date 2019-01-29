@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
+import '../index.css'
 
 import {fire} from './config/fire'
 const liStyle = {
@@ -26,10 +27,11 @@ function Header (){
                     </div>
                     <div className = "col-md-5"></div>
                     <div className = "col-md-3 mt-2"> 
-                        <ul className = "nav nav-pills nav-fill">
-                                <Link to = "/login"> <li className = "nav-item"> LOGIN </li> </Link>
-                                <Link to = "/signup"> <li className = "nav-item"> SIGN UP </li> </Link>
-                        </ul>
+                        <nav class="nav nav-pills nav-justified">
+                             <Link to = "/login" className = "nav-link" style = {{color: '#fff',backgroundColor: "#337ab7"}}>  LOGIN  </Link>
+                                &nbsp; &nbsp;
+                             <Link to = "/signup" className = "nav-link" style = {{color: '#fff',backgroundColor: "#337ab7"}}> SIGN UP </Link>
+                        </nav>
                     </div>
                 </div>
             )
@@ -42,10 +44,10 @@ function Header (){
                 <div className = "col-md-5"></div>
                 <div className = "col-md-3 mt-2">
                     <ul>
-                        <Link to = "./profile/viewProfile"> <li> PROFILE </li> </Link>
-                        <li className ="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> CLUBS </li>
+                        <Link to = "./profile/viewProfile" style = {{textDecoration : 'none', cursor : 'pointer'}}> <li> PROFILE </li> </Link>
+                        <li className ="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style = {{textDecoration : 'none', cursor : 'pointer'}}> CLUBS </li>
                                     <ul className ="dropdown-menu" id="drop-menu" >
-                                        <Link to = "/club/createClub"><li style = {liStyle}> Create Clubs </li></Link>
+                                        <Link to = "/club/createClub" className = "nav-link" style = {{color: '#fff',backgroundColor: "#337ab7"}}> Create Clubs </Link>
                                         <Link to = "/club/addMembers"><li style = {liStyle}>Add Members to Club (via Email) </li></Link>  
                                         <Link to = "/club/viewClubs"><li style = {liStyle}> View Created Clubs </li></Link>
                                     </ul>
