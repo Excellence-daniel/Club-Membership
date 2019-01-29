@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## CLUB MEMBERSHIP
 
-In this prject, the app can perform operations : 
+In this project, the app can perform operations : 
 
 ```
 1. Create a user and store user data in database (firebase)
