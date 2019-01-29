@@ -26,7 +26,7 @@ class AddMembers extends Component {
     }
 
     render(){
-        
+
        return (
             <div class = "col-md-12"> 
                 <div class = "col-md-12">
@@ -34,7 +34,11 @@ class AddMembers extends Component {
                 </div>
                 <div class = "col-md-12">
                     <div className = "col-md-3 mx-auto"> 
-                        <h2> CLUB </h2>
+                        <h2> Add Members</h2>
+                        <input type = "email" class = "form-control"/>
+                        <p>
+                            <button class = "btn btn-danger"> INVITE </button>
+                        </p>
                     </div>
                 </div>
             </div>
