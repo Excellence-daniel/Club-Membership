@@ -34,9 +34,9 @@ function Header (props){
                         <Link to = "./profile/viewProfile"> <li> PROFILE </li> </Link>
                         <li className ="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> CLUBS </li>
                                     <ul className ="dropdown-menu" id="drop-menu" >
-                                        <Link to = "./club/createClub"><li style = {liStyle}> Create Clubs </li></Link>
-                                        <Link to = "./club/addMembers"><li style = {liStyle}>Add Members to Club (via Email) </li></Link>  
-                                        <Link to = "./club/viewClubs"><li style = {liStyle}> View Created Clubs </li></Link>
+                                        <Link to = "/club/createClub"><li style = {liStyle}> Create Clubs </li></Link>
+                                        <Link to = "/club/addMembers"><li style = {liStyle}>Add Members to Club (via Email) </li></Link>  
+                                        <Link to = "/club/viewClubs"><li style = {liStyle}> View Created Clubs </li></Link>
                                     </ul>
 
                         <li> <button className = "btn btn-danger" onClick = {props.logOut}> LOG OUT </button> </li>
