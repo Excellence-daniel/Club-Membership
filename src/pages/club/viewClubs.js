@@ -1,62 +1,87 @@
 import React, {Component} from 'react'
+import {Link, Redirect} from 'react-router-dom'
 
 import Header from '../header'
-import {db} from '../config/fire'
+import {fire,db} from '../config/fire'
 // import '../index.css'
 
 class ViewClubs extends Component {
     constructor(props){
         super(props);
         this.state = {
-            clubs : []
+            clubs : [], 
+            clubsID : [], 
+            admin : true, 
+            clubName : '',
+            clubType : '',
+            email : '',
+            memberLimit : null
         }
     }
 
     componentDidMount(){
-        const allClubs = []
-        db.collection('Clubs').where("Email", "==", "oyeniranexcellenced@gmail.com").get()
+        const self = this
+        fire.auth().onAuthStateChanged(function(user){
+            console.log(user.email)
+       
+        const allClubs =  []
+        let allClubsID = []
+        let user_name = localStorage.getItem("UserName")
+        db.collection('Clubs').where("Email", "==", "oyeniranexcellenced@gmail.com").get()  
+        // {/*user.email*/}
         .then((querySnapshot) => {
             querySnapshot.forEach(function(doc) {
                 console.log(doc.id, " => ", doc.data());
+
+                if (user_name === doc.data().Name){
+                    self.setState({admin : true})
+                }
+
                 allClubs.push(doc.data())
+                allClubsID.push(doc.id)
             });
             console.log("ALL:", allClubs)
             if (allClubs.length > 0){
-                this.setState({clubs : [...this.state.clubs, ...allClubs]})
+                self.setState({clubs : [...self.state.clubs, ...allClubs], clubsID : [...self.state.clubsID, ...allClubsID]})
             }
         })
         .catch(function(error) {
             console.log("Error getting documents: ", error);
         });
+    })
     }
 
-    displayTable = () => {
-        if (this.state.clubs !== null){
-            return (
-                    <div>
-                    {this.state.clubs.map((club, id) => (
-                        <tr key = {id}>
-                        <td> {club.ClubName} </td>
-                        <td> {club.ClubType} </td>
-                        <td> {club.Email} </td> 
-                        <td> {club.MemberLimit} </td>
-                        </tr>
-                    ))}
-                    </div>
-            ) 
-        } else {
-            return <div><i><h2> No data to show </h2></i> </div>
-        }
+    deleteClub = (e) => {
+        var id = e.target.id
+        db.collection('Clubs').doc(id).delete()
+        .then((data) => {
+            alert("Club Deleted!")
+            return <Redirect to = "/clubs/viewClubs"/>
+        })
+        .catch((error) => {
+            alert("Error. Try Again!")
+            console.log(error)
+        })
+        //console.log("ID", id)
+    }
+
+    leaveClub = (e) => {
+
+    }
+
+    editClub = () => {
+
     }
 
     render(){
         return (
-            <div class = "col-md-12">
-                <div class = "col-md-12">
+            <div className = "col-md-12">
+                <div className = "col-md-12">
                     <Header/>
                 </div> 
-                <div class = "col-md-12">
-                    <table> 
+                <div className = "col-md-2"></div>
+                <div className = "col-md-8">
+                    <table className = "table"> 
                         <thead>
                             <tr>
                                 <th> Club Name</th>
@@ -67,13 +92,34 @@ class ViewClubs extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr> 
-                                {this.displayTable()}
-                            </tr>
+                        {this.state.clubs.length > 0 ? 
+                            this.state.clubs.map((club, id) => (
+                        <tr key = {id}>
+                        <td> {club.ClubName} </td>
+                        <td> {club.ClubType} </td>
+                        <td> {club.Email} </td> 
+                        <td> {club.MemberLimit} </td>
+                        <td></td>
+                                {this.state.admin === true ? 
+                                    <td> 
+                                        <Link to = {{pathname : "/clubs/editClub", state : ({id: this.state.clubsID[id]})}}>      <button className = "btn btn-primary"> EDIT </button></Link>
+                                                &nbsp;  &nbsp;
+                                        <button className = "btn btn-danger" id = {this.state.clubsID[id]} onClick ={this.deleteClub}> DELETE </button>
+                                    </td>
+                                :
+                                    <td> <button className = "btn btn-alert"> LEAVE</button> </td>
+                            }
+                         </tr>
+                        
+                    )) :
+                        <tr style = {{fontSize : '20px'}}>
+                           <center> "No Clubs Available"  </center> 
+                        </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
-            
+                <div className = "col-md-2"></div>            
             </div>
         )
     }
