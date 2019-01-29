@@ -47,12 +47,22 @@ import Header from './header'
             Phone : this.state.phone,
             Password : this.state.password
          }).then((u) => {
+             alert("Sign Up - ")
             fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u) => {
+                var user = fire.auth().currentUser
+                user.sendEmailVerification().then(function(){
+                    console.log("Email Sent") 
+                    if(fire.auth().currentUser.emailVerified === true){
+                        this.setState({redirect : true})
+                    }
+                }).catch(function(error){
+                    console.log(error)
+                })
                 // console.log(u , "SUCCESS")
              }).catch((error) => {
-                // console.log(error);
+                 console.log(error.message);
              })
-             this.setState({redirect : true})
+            // this.setState({redirect : true})
          })
          
      }
@@ -68,7 +78,8 @@ import Header from './header'
                 <div className = "col-md-12">
                     <Header/>
                 </div>
-                <div className = "col-md-6">
+                <div className = "col-md-4"></div>
+                <div className = "col-md-4 mt-5">
                         <p>
                             <label> Full Name </label>
                             <input type = "text" onChange = {this.handleNameInput} className = "form-control"/>
@@ -96,6 +107,7 @@ import Header from './header'
 
                         <button className = "btn btn-block btn-secondary" onClick ={this.signup}> SIGN UP </button>
                 </div>
+                <div className = "col-md-4"></div>
             </div>
         )
     }
