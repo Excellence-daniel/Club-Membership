@@ -89,7 +89,10 @@ import Header from './header'
                     <Header/>
                 </div>
                 <div className = "col-md-4"></div>
-                <div className = "col-md-4 mt-5">
+                <div className = "col-md-4 mt-5 card card-body">
+                        <p className = "col-md-12"> 
+                            <center><img src = "img/avata.png" style = {{width : '20%'}}/></center>
+                        </p>
                         <p>
                             <label> Full Name </label>
                             <input type = "text" onChange = {this.handleNameInput} className = "form-control"/>
