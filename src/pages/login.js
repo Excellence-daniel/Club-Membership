@@ -31,8 +31,9 @@ class LoginUser extends Component {
         fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=> {
             console.log(u , "SUCCESS")
             alert("You are logged in");
-            this.setState({redirect : true, loginStatus : true})
             localStorage.setItem("LOGIN", true)
+            this.setState({redirect : true, loginStatus : true})
+            
         }).catch((error)=>{
           console.log(error)
           alert("Wrong Email or Password")
@@ -49,7 +50,7 @@ class LoginUser extends Component {
         return (
             <div className = "col-md-12">
                 <div className = "col-md-12">
-                    <Header/>
+                    <Header isloggedIn = {this.state.loginStatus}/>
                 </div>
                 <div className = "col-md-5"></div>
                 <div className = "col-md-2 mt-5"> 
