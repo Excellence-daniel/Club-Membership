@@ -47,7 +47,7 @@ class CreateClub extends Component{
             alert ("Fill in all fields"); 
         } else { 
             db.collection('Clubs').add({
-                Name : this.state.name,
+                AdminName : this.state.name,
                 Email : this.state.email,
                 ClubName : this.state.clubName,
                 ClubType : this.state.clubType, 
@@ -68,35 +68,35 @@ class CreateClub extends Component{
 
     render(){
         if (this.state.redirect === true){
-            return <Redirect to = "./addMembers" />
+            return <Redirect to = "./viewClubs" />
         }
         return (
-            <div class = "col-md-12"> 
-                <div class = "col-md-12">
+            <div className = "col-md-12"> 
+                <div className = "col-md-12">
                     <Header/>
                 </div>
-                <div class = "col-md-12">
-                    <div clasName = "col-md-4"></div>
-                    <div class = "col-md-4 mx-auto card card-body">
+                <div className = "col-md-12">
+                    <div className = "col-md-4"></div>
+                    <div className = "col-md-4 mx-auto card card-body mt-4">
                         <form> 
                             <p>
                                 <label>  Name </label> 
-                                <input type = "text" onChange = {this.handleNameInput} class = "form-control"/>
+                                <input type = "text" onChange = {this.handleNameInput} className = "form-control"/>
                             </p>
 
                             <p>
                                 <label> Email </label>
-                                <input type = "email" onChange = {this.handleEmailInput} class = "form-control"/>
+                                <input type = "email" onChange = {this.handleEmailInput} className = "form-control"/>
                             </p>
 
                             <p>
                                 <label> Club Name </label>
-                                <input type = "text" onChange ={this.handleClubName} class = "form-control"/>
+                                <input type = "text" onChange ={this.handleClubName} className = "form-control"/>
                             </p>
                             
                             <p> 
                                 <label> Club Type </label>
-                                <select onChange = {this.handleClubType} class = "form-control"> 
+                                <select onChange = {this.handleClubType} className = "form-control"> 
                                     <option value = "Game"> Game </option> 
                                     <option value = "Book"> Book </option>
                                     <option value = "State Affairs"> State Affairs Discussion </option> 
@@ -105,9 +105,9 @@ class CreateClub extends Component{
 
                             <p> 
                                 <label> Members Limit </label>
-                                <input type = "number" onChange ={this.handleMemberLimit} class = "form-control"/>
+                                <input type = "number" onChange ={this.handleMemberLimit} className = "form-control"/>
                             </p>
-                            <button onClick = {this.onCreateClub} class = "btn btn-success btn-block"> CREATE CLUB </button>
+                            <button onClick = {this.onCreateClub} className = "btn btn-success btn-block"> CREATE CLUB </button>
                         </form>
                     </div>
                     <div className = "col-md-4"></div>
