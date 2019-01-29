@@ -11,7 +11,8 @@ class LoginUser extends Component {
         this.state = {
             email : '',
             password : '', 
-            redirect : false
+            redirect : false, 
+            loginStatus : false
         }
     }
 
@@ -29,13 +30,15 @@ class LoginUser extends Component {
         e.preventDefault()
         fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=> {
             console.log(u , "SUCCESS")
-            alert("You rare logged in");
-            this.setState({redirect : true})
-
+            alert("You are logged in");
+            this.setState({redirect : true, loginStatus : true})
         }).catch((error)=>{
           console.log(error)
+          alert("Wrong Email or Password")
         })
       }
+
+      
 
     render(){
         const redirect = this.state.redirect
@@ -45,9 +48,10 @@ class LoginUser extends Component {
         return (
             <div className = "col-md-12">
                 <div className = "col-md-12">
-                    <Header/>
+                    <Header loginStatus = {this.state.loginStatus} logOut = {this.logOut}/>
                 </div>
-                <div className = "col-md-6 mx-auto card card-body"> 
+                <div className = "col-md-5"></div>
+                <div className = "col-md-2 mt-5"> 
                     <form>
                         <p>
                             <label> Email Address </label>
@@ -57,9 +61,10 @@ class LoginUser extends Component {
              e               <label> Password </label>
                             <input type = "password" onChange = {this.handlePasswordInput} className = "form-control"/>
                         </p>
-                        <button className = "btn btn-primary" onClick = {this.login}> LOGIN </button>
+                        <button className = "btn btn-primary btn-block" onClick = {this.login}> LOGIN </button>
                     </form>       
                 </div>
+                <div className = "col-md-5"></div>
             </div>
         )
     }
