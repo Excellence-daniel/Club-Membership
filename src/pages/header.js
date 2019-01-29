@@ -19,7 +19,7 @@ function logOut(){
 function Header (){
    const status = localStorage.getItem("LOGIN")
    console.log(status)
-        if(status === true){
+        if(status !== true){
             return (
                 <div className = "col-md-12">
                     <div className = "col-md-4"> 
@@ -27,7 +27,7 @@ function Header (){
                     </div>
                     <div className = "col-md-5"></div>
                     <div className = "col-md-3 mt-2"> 
-                        <nav class="nav nav-pills nav-justified">
+                        <nav className ="nav nav-pills nav-justified">
                              <Link to = "/login" className = "nav-link" style = {{color: '#fff',backgroundColor: "#337ab7"}}>  LOGIN  </Link>
                                 &nbsp; &nbsp;
                              <Link to = "/signup" className = "nav-link" style = {{color: '#fff',backgroundColor: "#337ab7"}}> SIGN UP </Link>
@@ -57,10 +57,7 @@ function Header (){
                 </div>
             </div>
            )
-        }
-    
-
-       
+        }     
 }
 
 export default Header;
