@@ -8,6 +8,7 @@ import SignUpUser from './signup'
 import ViewClubs from './club/viewClubs'
 import AddMembers from './club/addMembers'
 import CreateClub from './club/createClub'
+import EditClub from './club/editClub'
 
 import ViewProfile from './profile/viewProfile'
 
@@ -23,6 +24,7 @@ function Routerr (){
                 <Route exact path = "/club/addMembers" component = {AddMembers}/>
                 <Route exact path = "/club/createClub" component = {CreateClub}/>
                 <Route exact path = "/profile/viewProfile" component = {ViewProfile}/>
+                <Route exact path = "/clubs/editClub" render ={(props) => <EditClub {...props}/>}/>
             </div>  
         </Router>
     )
