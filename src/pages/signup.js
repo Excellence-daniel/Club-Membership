@@ -37,38 +37,48 @@ import Header from './header'
         this.setState({password : e.target.value})
      }
 
-     signup = (e) => {
-         e.preventDefault()
-         
-         db.collection('Users').add({
-            Name : this.state.name, 
-            Email : this.state.email,
-            Address : this.state.address,
-            Phone : this.state.phone,
-            Password : this.state.password
-         }).then((u) => {
-             alert("Sign Up - ")
-            fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((u) => {
+     signup = async (e) => {
+        e.preventDefault();
+        
+        if(this.state.name === '' || this.state.email === '' || this.state.address === '' || this.state.phone === '' || this.state.password === '' ){
+            alert('Fill all fields.')
+        } else {
+            const self = this
+        await fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(function(data){
+            let authsuccess = data.additionalUserInfo.isNewUser 
+            if (authsuccess === true){
                 var user = fire.auth().currentUser
-                user.sendEmailVerification().then(function(){
-                    console.log("Email Sent") 
-                    if(fire.auth().currentUser.emailVerified === true){
-                        this.setState({redirect : true})
-                    }
-                }).catch(function(error){
-                    console.log(error)
-                })
-                // console.log(u , "SUCCESS")
-             }).catch((error) => {
-                 console.log(error.message);
-             })
-            // this.setState({redirect : true})
-         })
-         
+                console.log("here") 
+                 var sendEmail = user.sendEmailVerification() //send the user an email for verification
+                 if (sendEmail){
+                        alert("Verify your email.") //user to verify email
+                            db.collection('Users').add({ //add these to database
+                                Name : self.state.name, 
+                                Email : self.state.email,
+                                Address : self.state.address,
+                                Phone : self.state.phone,
+                                Password : self.state.password
+                             }).then(function(data){
+                                 console.log(data)
+                                 if (data){
+                                    self.setState({redirect : true})
+                                    alert('User Signed In Successfully!')
+                                 }
+                             }).catch(function(error){
+                                    alert(error.message + ". Please try again") 
+                             })
+            } //console.log("SUCCESS", data.additionalUserInfo.isNewUser)
+          }
+        }).catch(function(error){
+            console.log("SUCCESS", false)
+            console.log("error", error.message)
+            alert(error.message + " Please try again")
+        })
+     }
      }
 
     render(){
-
         const redirect = this.state.redirect
         if (redirect){
           return <Redirect to = "./login" />
