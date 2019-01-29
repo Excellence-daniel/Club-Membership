@@ -38,7 +38,6 @@ class CreateClub extends Component{
 
     handleMemberLimit = (e) => {
         this.setState({memberLimit : e.target.value})
-        console.log(this.state.memberLimit)
     }
 
     onCreateClub = (e) => {
@@ -53,15 +52,15 @@ class CreateClub extends Component{
                 ClubType : this.state.clubType, 
                 MemberLimit : this.state.memberLimit, 
                 Members : {}
-            })
+            }) //submit data into firebase collection
             .then((u) => {
                 console.log(u)
-                alert("Club Created!")
-                localStorage.setItem("Club", this.state.clubName)
-                this.setState({redirect : true})
+                alert("Club Created!") //display on success
+                localStorage.setItem("Club", this.state.clubName) //set localStorage to clubName
+                this.setState({redirect : true}) //enable redirect the page to view club
             }).catch((error) => {
                 console.log(error)
-                alert("Can't create club at the moment, please try again!")
+                alert("Can't create club at the moment, please try again!") //Error message
             })
         }
     }
