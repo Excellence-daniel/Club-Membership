@@ -8,13 +8,19 @@ class LandingPage extends Component{
         super(props);
         this.state = {
             //loginStatus : false
+            status : false
         }
+    }
+
+    componentDidMount(){
+        var status = localStorage.getItem("LOGIN")
+        this.setState({status})
     }
 
     render(){
         return (
             <div>
-                <Header/>
+                <Header isloggedIn ={this.state.status}/>
             </div>
         )
     }
