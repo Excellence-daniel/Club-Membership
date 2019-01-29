@@ -44,12 +44,11 @@ import Header from './header'
             alert('Fill all fields.')
         } else {
             const self = this
-        await fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        await fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password) //create user with email and password in auth
         .then(function(data){
-            let authsuccess = data.additionalUserInfo.isNewUser 
+            let authsuccess = data.additionalUserInfo.isNewUser  //if user email does not exist, he is a a newUser i.e authSuccess = true
             if (authsuccess === true){
-                var user = fire.auth().currentUser
-                console.log("here") 
+                var user = fire.auth().currentUser  //get the current user
                  var sendEmail = user.sendEmailVerification() //send the user an email for verification
                  if (sendEmail){
                         alert("Verify your email.") //user to verify email
@@ -58,7 +57,8 @@ import Header from './header'
                                 Email : self.state.email,
                                 Address : self.state.address,
                                 Phone : self.state.phone,
-                                Password : self.state.password
+                                Password : self.state.password, 
+                                Admin : false
                              }).then(function(data){
                                  console.log(data)
                                  if (data){
@@ -91,7 +91,7 @@ import Header from './header'
                 <div className = "col-md-4"></div>
                 <div className = "col-md-4 mt-5 card card-body">
                         <p className = "col-md-12"> 
-                            <center><img src = "img/avata.png" style = {{width : '20%'}}/></center>
+                            <center><img src = "img/avata.png" alt = "Avatar SignUp" style = {{width : '20%'}}/></center>
                         </p>
                         <p>
                             <label> Full Name </label>
