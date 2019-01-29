@@ -13,6 +13,10 @@ import EditClub from './club/editClub'
 import ViewProfile from './profile/viewProfile'
 
 function Routerr (){
+    let status = localStorage.getItem("LOGIN")
+    if (!status){
+        localStorage.setItem("LOGIN", false)
+    }
     return (
         <Router> 
             <div> 
