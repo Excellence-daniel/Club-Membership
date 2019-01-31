@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import '../index.css'
 
-import {fire} from './config/fire'
+import {fire,db} from './config/fire'
 const liStyle = {
     display : 'block'
 }
@@ -11,32 +11,46 @@ class Header extends Component{
     constructor(props){
         super(props);
         this.state = {
-            status : false,
+            isLoggedIn : false,
             redirect : false
         }
     }
-    componentDidMount(){
-        //console.log("HERWE", this.props.isloggedIn)
-        var status = this.props.isloggedIn
-        this.setState({status})
-        var getLOGIN = localStorage.getItem("LOGIN")
-        if (!getLOGIN){
-            localStorage.setItem("LOGIN", false)
-        }
+    componentDidMount =async () => {
+        const user = fire.auth().currentUser        
+        if (user){
+            //if user is present, check of his email is verified
+                let emailVerifiied = false
+                const getUserCollection =  await db.collection('Users').where("Email", "==", user.email).get()
+                console.log("HEY", getUserCollection)
+                if(getUserCollection.docs.length > 0){
+                    const getUser = getUserCollection.docs[0]._document.proto.fields; 
+                    const getUserEmailVer = getUser.EmailVerified.booleanValue
+                    emailVerifiied = getUserEmailVer
+                } 
+
+            if (emailVerifiied === false){
+                 this.setState({isLoggedIn : false})
+                 console.log("User is in but email is not verified ")
+            } else {
+                 this.setState({isLoggedIn : true})
+                 console.log("User is in and verfied")
+            }
+        } else{
+             console.log("User is out.")
+             this.setState({isLoggedIn : false})
+         }
     }
 
-    logOut = () => {
-            fire.auth().signOut()
-            .then(() => {
-                localStorage.setItem("LOGIN", false);
-            })
-        }
+    logOut =()=> {
+        fire.auth().signOut()  
+    }
+
     render(){   
         if (this.state.redirect === true ){
             return <Redirect to = '/'/>
         }     
-        console.log("STATE STATUS", this.state.status, "LS STATUS", localStorage.getItem("LOGIN"))
-        if(this.state.status === false){
+        console.log("LoggedIn: " ,this.state.isLoggedIn)
+        if(this.state.isLoggedIn === false){
             return (
                 <div className = "col-md-12">
                     <div className = "col-md-12" > 
@@ -70,8 +84,8 @@ class Header extends Component{
                                              CLUBS 
                                 </li>
                                             <ul className ="dropdown-menu" id="drop-menu" >
-                                                <Link to = "/club/createClub" style = {{textDecoration : 'none', cursor:'pointer'}}> Create Clubs </Link>
-                                                <Link to = "/club/addMembers" style = {{textDecoration : 'none', cursor:'pointer'}}>>
+                                                <Link to = "/club/createClub" style = {{textDecoration : 'none', cursor:'pointer'}}> <li style = {liStyle}> Create Clubs </li> </Link>
+                                                <Link to = "/club/addMembers" style = {{textDecoration : 'none', cursor:'pointer'}}>
                                                         <li style = {liStyle}>
                                                             Add Members to Club (via Email) 
                                                         </li>
@@ -86,9 +100,7 @@ class Header extends Component{
                             </ul>
                             </center>
                         </div>
-                        <div className = "col-md-4"> 
-                            
-                        </div>
+                        <div className = "col-md-4"></div>
                     </div>
 
             </div>
