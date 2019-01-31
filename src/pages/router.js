@@ -9,7 +9,7 @@ import ViewClubs from './club/viewClubs'
 import AddMembers from './club/addMembers'
 import CreateClub from './club/createClub'
 import EditClub from './club/editClub'
-import JoinClub from './club.joinClub'
+import JoinClub from './club/joinClub'
 
 import VerifyEmail from './verifyEmail'
 
