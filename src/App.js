@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import fire from './config/fire'
 // import Home from './pages/homePage'
