@@ -37,7 +37,7 @@ exports.firestoreValidateNewUsers = functions.firestore
 }}))
 
 exports.firestoreInviteEmail = functions.firestore
-    .document('Clubs/{ClubsId}')
+    .document('Clubs/{ClubsId}/Members')
     .onUpdate((change, context) => new Promise((resolve,reject) => { 
         const ClubInviteData = change.after.data();
         console.log("Change After ", change.after.data())
