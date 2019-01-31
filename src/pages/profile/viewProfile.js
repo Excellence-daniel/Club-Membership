@@ -82,7 +82,6 @@ class ViewProfile extends Component{
         return (
             <div class = "col-md-12"> 
                 <Header/>
-
                     <div class = "col-md-4"></div>                
                     <div class = "col-md-4 mt-4 card card-body"> 
                         <h2><center> Profile Information </center></h2>
