@@ -42,6 +42,7 @@ exports.firestoreInviteEmail = functions.firestore
         const ClubInviteData = change.after.data();
         console.log("Change After ", change.after.data())
         console.log("Before Data", change.before.data())
+        console.log("NEW DATA", ClubInviteData.Members)
         // console.log("ClubInviteData", ClubInviteData)
 //                     const user = userData
 //                     const 
