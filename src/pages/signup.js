@@ -42,31 +42,35 @@ import Header from './header'
         
         if(this.state.name === '' || this.state.email === '' || this.state.address === '' || this.state.phone === '' || this.state.password === '' ){
             alert('Fill all fields.')
-        } else {
-            const self = this
+        } else {            
+        const self = this
         await fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password) //create user with email and password in auth
         .then(function(data){
             let authsuccess = data.additionalUserInfo.isNewUser  //if user email does not exist, he is a a newUser i.e authSuccess = true
             if (authsuccess === true){
                 var user = fire.auth().currentUser  //get the current user
                  var sendEmail = user.sendEmailVerification() //send the user an email for verification
+                 console.log("EMAIL VER", sendEmail)
                  if (sendEmail){
-                        alert("Verify your email.") //user to verify email
+                        alert("Verify your emai") //user to verify email
                             db.collection('Users').add({ //add these to database
                                 Name : self.state.name, 
                                 Email : self.state.email,
                                 Address : self.state.address,
                                 Phone : self.state.phone,
                                 Password : self.state.password, 
-                                Admin : false
+                                Admin : false, 
+                                EmailVerified : false
                              }).then(function(data){
-                                 console.log(data)
+                                 console.log("SIGNUP DATA ", data)
                                  if (data){
-                                    self.setState({redirect : true})
-                                    alert('User Signed In Successfully!')
+                                    self.setState({redirect : true})                                    
+                                    localStorage.setItem("Email",self.state.email) //save email
+                                    alert('User Registered Successfully. Verify your email')
                                  }
                              }).catch(function(error){
                                     alert(error.message + ". Please try again") 
+                                    //should delete user from auth. Do!!
                              })
             } //console.log("SUCCESS", data.additionalUserInfo.isNewUser)
           }
@@ -90,9 +94,9 @@ import Header from './header'
                 </div>
                 <div className = "col-md-4"></div>
                 <div className = "col-md-4 mt-5 card card-body">
-                        <p className = "col-md-12"> 
+                        <div className = "col-md-12"> 
                             <center><img src = "img/avata.png" alt = "Avatar SignUp" style = {{width : '20%'}}/></center>
-                        </p>
+                        </div>
                         <p>
                             <label> Full Name </label>
                             <input type = "text" onChange = {this.handleNameInput} className = "form-control"/>
