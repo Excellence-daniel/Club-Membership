@@ -32,8 +32,8 @@ function Routerr (){
                 <Route exact path = "/club/addMembers" component = {AddMembers}/>
                 <Route exact path = "/club/createClub" component = {CreateClub}/>
                 <Route exact path = "/profile/viewProfile" component = {ViewProfile}/>
-                <Route exact path = "/clubs/editClub" render ={(props) => <EditClub {...props}/>}/>
-                <Route exact path = "/clubs/joinClub" component = {JoinClub}/>
+                <Route exact path = "/club/editClub" render ={(props) => <EditClub {...props}/>}/>
+                <Route exact path = "/club/joinClub" component = {JoinClub}/>
             </div>  
         </Router>
     )
