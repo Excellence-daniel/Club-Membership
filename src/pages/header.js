@@ -4,7 +4,8 @@ import '../index.css'
 
 import {fire,db} from './config/fire'
 const liStyle = {
-    display : 'block'
+    textDecoration : 'none', 
+    cursor : 'pointer'
 }
 
 class Header extends Component{
@@ -43,6 +44,8 @@ class Header extends Component{
 
     logOut =()=> {
         fire.auth().signOut()  
+        alert('Logged Out')
+        this.setState({redirect : true})
     }
 
     render(){   
@@ -75,32 +78,35 @@ class Header extends Component{
             <div className = "col-md-12">
                     <div className = "col-md-12" > 
                         <center><h1> CLUB MEMBERSHIP APP </h1></center>
-                        <div className = "col-md-4"></div>
-                        <div className = "col-md-4 mt-3">
+                        <div className = "col-md-3"></div>
+                        <div className = "col-md-6 mt-3">
                             <center>
                             <ul>
-                                <Link to = "/profile/viewProfile" style = {{textDecoration : 'none', cursor : 'pointer', color: 'black'}}> <li> PROFILE </li> </Link>
-                                <li className ="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style = {{textDecoration : 'none', color : 'black', cursor : 'pointer'}}>
-                                             CLUBS 
-                                </li>
-                                            <ul className ="dropdown-menu" id="drop-menu" >
-                                                <Link to = "/club/createClub" style = {{textDecoration : 'none', cursor:'pointer'}}> <li style = {liStyle}> Create Clubs </li> </Link>
-                                                <Link to = "/club/addMembers" style = {{textDecoration : 'none', cursor:'pointer'}}>
-                                                        <li style = {liStyle}>
-                                                            Add Members to Club (via Email) 
-                                                        </li>
-                                                </Link>  
-                                                <Link to = "/club/viewClubs" style = {{textDecoration : 'none', cursor:'pointer'}}>>
-                                                        <li style = {liStyle}> 
-                                                            View Created Clubs 
-                                                        </li>
-                                                </Link>
-                                            </ul>
+                                <Link to = "/profile/viewProfile" style = {liStyle}> 
+                                    <li> PROFILE </li> 
+                                </Link>
+
+                                <Link to = "/club/createClub" style = {liStyle}> 
+                                    <li> CREATE CLUB </li> 
+                                </Link>
+
+                                <Link to = "/club/addMembers" style = {liStyle}>
+                                    <li>
+                                        INVITE CLUB MEMBERS 
+                                    </li>
+                                </Link>
+
+                                <Link to = "/club/viewClubs" style = {liStyle}>
+                                    <li> 
+                                        VIEW CLUBS 
+                                    </li>
+                                </Link>
+
                                 <li> <button className = "btn btn-danger" onClick = {this.logOut}> LOG OUT </button> </li>
                             </ul>
                             </center>
                         </div>
-                        <div className = "col-md-4"></div>
+                        <div className = "col-md-3"></div>
                     </div>
 
             </div>
