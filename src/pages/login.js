@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom'
 
-import {fire} from './config/fire'
+import {fire,db} from './config/fire'
 import Header from './header'
 
 
@@ -11,8 +11,7 @@ class LoginUser extends Component {
         this.state = {
             email : '',
             password : '', 
-            redirect : false, 
-            loginStatus : false
+            redirect : false
         }
     }
 
@@ -24,48 +23,64 @@ class LoginUser extends Component {
     handlePasswordInput = (e) => {        
             this.setState({password : e.target.value})
         console.log(this.state.password)
-    }  
+    } 
 
-    login = (e) => {
-        e.preventDefault();
-        fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then((u)=> {
+    calllogin=(email, password)=> {
+        fire.auth().signInWithEmailAndPassword(email, password).then((u)=> {
             console.log(u , "SUCCESS");
             alert("You are logged in");
-            localStorage.setItem("LOGIN", true);
-            this.setState({redirect : true, loginStatus : true});            
+            this.setState({redirect : true})            
         }).catch((error)=>{
-          console.log(error);
-          alert("Wrong Email or Password");
+          console.log(error)
+          alert("Wrong Email or Password")
         })
-      }
+    } 
 
-      
+    login = async (e) => {
+        e.preventDefault();
+        const {email, password} =  this.state
+        if (email === '' || password === ''){
+            alert("Fill in all fields")
+        }else {
+            const getUserCollection =  await db.collection('Users').where("Email", "==", email).get()
+            const getUser = await getUserCollection.docs[0]._document.proto.fields;
+            const getUserEmailVer = await getUser.EmailVerified.booleanValue //to get if user is verified
+            
+            if (getUserEmailVer === false){
+                alert("Verify your email before you login")
+                this.setState({redirect : true})
+            } else {
+                fire.auth().signInWithEmailAndPassword(email, password).then((u)=> {
+                    console.log(u , "SUCCESS");
+                    alert("You are logged in");
+                    this.setState({redirect : true})            
+                }).catch((error)=>{
+                    console.log(error)
+                    alert("Wrong Email or Password")
+                })
+            }
+        }
+    }      
 
     render(){
         const redirect = this.state.redirect
         if (redirect){
-            return <Redirect to = './'/>
+            return <Redirect to = '/'/>
         }
         return (
             <div className = "col-md-12">
                 <div className = "col-md-12">
-                    <Header isloggedIn = {this.state.loginStatus}/>
+                    <Header/>
                 </div>
                 <div className = "col-md-5"></div>
                 <div className = "col-md-2 mt-5"> 
                     <form>
-                        <p> 
-                            <center>
-                                img src = "img/avata.png" alt = "Avatar-Login" style = {{width: '20%'}}/>
-                            </center>
-                        </p>
                         <p>
                             <label> Email Address </label>
                             <input type ="email" onChange = {this.handleEmailInput} className ="form-control"/>
                         </p>
                         <p>
-             e               <label> Password </label>
+                            <label> Password </label>
                             <input type = "password" onChange = {this.handlePasswordInput} className = "form-control"/>
                         </p>
                         <button className = "btn btn-primary btn-block" onClick = {this.login}> LOGIN </button>
