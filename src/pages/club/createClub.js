@@ -46,13 +46,15 @@ class CreateClub extends Component{
             alert ("Fill in all fields"); 
         } else { 
             db.collection('Clubs').add({
-                AdminName : this.state.name,
-                Email : this.state.email,
+                AdminEmail : this.state.email,
                 ClubName : this.state.clubName,
                 ClubType : this.state.clubType, 
                 MemberLimit : this.state.memberLimit, 
-                Members : {}
-            }) //submit data into firebase collection
+                Members : [], 
+                Inivites : []
+            })
+            
+             //submit data into firebase collection
             .then((u) => {
                 console.log(u)
                 alert("Club Created!") //display on success
