@@ -20,14 +20,14 @@ class ViewClubs extends Component {
     }
 
     componentDidMount(){
-        const self = this
-        fire.auth().onAuthStateChanged(function(user){
-            console.log(user.email)
-       
+        
+        fire.auth().onAuthStateChanged((user) => {
+            //console.log(user.email)
+            const self = this
         const allClubs =  []
         let allClubsID = []
         let user_name = localStorage.getItem("UserName")
-        db.collection('Clubs').where("Email", "==", "oyeniranexcellenced@gmail.com").get()  
+        db.collection('Clubs').where("Email", "==", user.email).get()  
         // {/*user.email*/}
         .then((querySnapshot) => {
             querySnapshot.forEach(function(doc) {
