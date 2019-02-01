@@ -50,9 +50,7 @@ import Header from './header'
             if (authsuccess === true){
                 var user = fire.auth().currentUser  //get the current user
                  var sendEmail = user.sendEmailVerification() //send the user an email for verification
-                 console.log("EMAIL VER", sendEmail)
                  if (sendEmail){
-                        alert("Verify your emai") //user to verify email
                             db.collection('Users').add({ //add these to database
                                 Name : self.state.name, 
                                 Email : self.state.email,
@@ -60,7 +58,8 @@ import Header from './header'
                                 Phone : self.state.phone,
                                 Password : self.state.password, 
                                 Admin : false, 
-                                EmailVerified : false
+                                EmailVerified : false,
+                                ClubsJoined : []
                              }).then(function(data){
                                  console.log("SIGNUP DATA ", data)
                                  if (data){
@@ -72,9 +71,8 @@ import Header from './header'
                                     alert(error.message + ". Please try again") 
                                     //should delete user from auth. Do!!
                              })
-            } //console.log("SUCCESS", data.additionalUserInfo.isNewUser)
           }
-        }).catch(function(error){
+        }}).catch(function(error){
             console.log("SUCCESS", false)
             console.log("error", error.message)
             alert(error.message + " Please try again")
