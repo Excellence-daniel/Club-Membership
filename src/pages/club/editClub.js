@@ -17,15 +17,21 @@ class EditClub extends Component{
             redirect : false
         }
     }
-    componentDidMount(props){
-        const self = this
+    componentDidMount = async(props)=>{
+        const loader = document.getElementById('loader').style
+        loader.display = 'block'
         const clubId = this.props.location.state.id
-        db.collection('Clubs').doc(clubId).get()        
-        .then(function(data){
-            let userData = data._document.proto.fields
-            console.log(data._document.proto.fields)
-            self.setState({id : clubId , name:userData.AdminName.stringValue, email : userData.Email.stringValue, clubname : userData.ClubName.stringValue, clubtype : userData.ClubType.stringValue, membersLimit : userData.MemberLimit.stringValue })
-        })
+        const clubb = await db.collection('Clubs').doc(clubId).get() 
+        const clubData = clubb.data()
+        console.log(clubb.data())       
+        this.setState({id : clubId , 
+                    name:clubData.AdminName, 
+                    email : clubData.AdminEmail, 
+                    clubname :clubData.ClubName, 
+                    clubtype : clubData.ClubType, 
+                    membersLimit : clubData.MemberLimit
+                    })
+        loader.display = 'none'
     }
 
     handleChangeClubName = (e) => {
@@ -41,6 +47,8 @@ class EditClub extends Component{
     }
 
     updateClubDetails = async () =>{
+        const loader = document.getElementById('loader').style
+        loader.display = 'block'
         await db.collection('Clubs').doc(this.state.id)
         .update({
            ClubName : this.state.clubname, 
@@ -53,6 +61,7 @@ class EditClub extends Component{
          console.log('error', error);
          alert("Cannot Update Club, try again!")
      })
+       loader.display = 'none'
     }
     render(){
         if (this.state.redirect === true){
@@ -74,6 +83,7 @@ class EditClub extends Component{
                     <p>
                         <label> Club Type </label>
                         <select value = {this.state.clubtype} onChange = {this.handleChangeClubType} class = "form-control">
+                            <option value = ""> SELECT A CLUB TYPE </option>
                             <option value = "Game"> Game </option> 
                             <option value = "Book"> Book </option>
                             <option value = "State Affairs"> State Affairs Discussion </option> 
@@ -91,7 +101,9 @@ class EditClub extends Component{
                     <p>
                         <button class = "btn btn-success btn-block" onClick = {this.updateClubDetails}> SAVE </button>
                     </p>
+                    <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '15%'}} id = "loader"/></center></div>
                </div>
+
                <div className = "col-md-4"></div>
             </div>
         )
