@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 
 import Header from './header'
-// import {fire} from './config/fire'
+import {fire, db} from './config/fire'
 
 class LandingPage extends Component{
     constructor(props){
@@ -15,6 +15,21 @@ class LandingPage extends Component{
     componentDidMount(){
         var status = localStorage.getItem("LOGIN")
         this.setState({status})
+        var club = localStorage.getItem("ClubJoined")
+        if (club){
+            var user = fire.auth().currentUser
+            const gUser = db.collection('Users').where("Email", "==", user.email)
+            let userID, Clubssjoined;
+            gUser.forEach((snapshot)=>{
+                userID = snapshot.id
+                Clubssjoined = snapshot.ClubsJoined
+            })
+            Clubssjoined.push(club)
+            db.collection('Users').doc(userID).update({
+                ClubsJoined : Clubssjoined 
+            })
+            localStorage.removeItem("ClubJoined")
+        }
     }
 
     render(){

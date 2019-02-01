@@ -29,30 +29,54 @@ componentDidMount(){
         const allClubs =  [] //an object that take all clubs of the user
         let allClubsID = [] //an array to take the ids of the clubs respectively
         if (user){
-            db.collection('Clubs').where("AdminEmail", "==", user.email).get()  
-            .then((querySnapshot) => {
-                querySnapshot.forEach(function(doc) {
-                    allClubs.push(doc.data())
-                    allClubsID.push(doc.id)
-                });
-                if (allClubs.length > 0){
-                    self.setState({clubs : [...self.state.clubs, ...allClubs], clubsID : [...self.state.clubsID, ...allClubsID]})
-                }
-            })
-            .catch(function(error) {
-                console.log("Error getting documents: ", error);
-            });
+            const clubs = await db.collection('Clubs').where("AdminEmail", "==", user.email).get() 
+            await clubs.forEach(querySnapshot => {
+                                console.log("QUERY", querySnapshot.data())
+                                allClubs.push(querySnapshot.data())
+                                allClubsID.push(querySnapshot.id)
+                            })
+            // console.log("DJSKD",clubss)
 
-            const getuser = await db.collection('Users').where("Email", "==", user.email).get()
-            const clubsjoinedArr = []
-            getuser.forEach((snapshot)=>{
-                clubsjoinedArr.push(snapshot.data().ClubsJoined)
-                self.setState({clubsjoinned : snapshot.data().ClubsJoined})
-            })
-            loader.display ='none'
-        }
-    })
-}
+
+    //         console.log() 
+    //         .then((querySnapshot) => {
+    //             querySnapshot.forEach(function(doc) {
+    //                 allClubs.push(doc.data())
+    //                 allClubsID.push(doc.id)
+    //             });
+               
+    //                 console.log({allClubs})
+    //                 self.setState({clubs : [...self.state.clubs, ...allClubs], clubsID : [...self.state.clubsID, ...allClubsID]})
+                
+    //         })
+    //         .catch(function(error) {
+    //             console.log("Error getting documents: ", error);
+    //         });
+
+    //         const clubsjoinedArr = [];
+    //         db.collection('Users').where("Email", "==", user.email).get()
+    //             .then((querySnapshot) => {
+    //             querySnapshot.forEach(function(doc) {
+    //                 console.log("JOINED", doc.data().ClubsJoined)
+    //                 let previousClubsJoined = doc.data().ClubsJoined
+
+    //                 clubsjoinedArr.push(previousClubsJoined)
+    //                 })
+    //                 console.log({clubsjoinedArr})
+    //             })
+    //                 console.log({clubsjoinedArr})
+    //                 this.setState({clubsjoinned : clubsjoinedArr})
+    //                 console.log("CLUBS", this.state.clubs)
+
+
+
+
+    //         // console.log("gftdetfghkj", self.state.clubsjoinned)
+    //         loader.display ='none'
+    //     }
+    // })
+    // console.log("CHECK", this.state.clubs, this.state.clubsID, this.state.clubsjoinned)
+}})}
 
 deleteClub = (e) => {
     const loader = document.getElementById('loader').style

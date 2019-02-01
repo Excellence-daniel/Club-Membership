@@ -13,7 +13,8 @@ class Header extends Component{
         super(props);
         this.state = {
             isLoggedIn : false,
-            redirect : false
+            redirect : false, 
+            loggedOut : false
         }
     }
     componentDidMount =async () => {
@@ -45,11 +46,11 @@ class Header extends Component{
     logOut =()=> {
         fire.auth().signOut()  
         alert('Logged Out')
-        this.setState({redirect : true})
+        this.setState({redirect : true, loggedOut : true})
     }
 
     render(){   
-        if (this.state.redirect === true ){
+        if (this.state.redirect === true || this.state.loggedOut === true){
             return <Redirect to = '/'/>
         }     
         console.log("LoggedIn: " ,this.state.isLoggedIn)

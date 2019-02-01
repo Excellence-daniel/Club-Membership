@@ -75,7 +75,7 @@ class EditClub extends Component{
                 </div>
                <div className = "col-md-4"></div> 
                 <div className = "col-md-4 mt-5">
-                    <h3> Club Details </h3> 
+                    <h3><center> Club Details </center></h3> 
                     <p>
                         <label> Club Name </label>
                         <input type = "text" className = "form-control" onChange = {this.handleChangeClubName} value = {this.state.clubname}/>

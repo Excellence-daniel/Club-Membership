@@ -38,18 +38,27 @@ class JoinClub extends Component{
         })
 
         if (user){
-
             const joinedClubs = user.ClubsJoined
             joinedClubs.push(newClub)
             await db.collection('Users').doc(userId).update({
                ClubsJoined : joinedClubs
             })
+            const clubDet = await db.collection('Clubs').where("AdminEmail", "==", this.state.adminEmail)
+            console.log("CLUBDET",clubDet)
 
+            alert("You have joined the club!")
+            this.setState({redirect : true})
         } else {
             console.log("DDSWEEE")
+            localStorage.setItem("ClubJoined", newClub)
+            var signUp = window.confirm("You have to sign up before you can join this club. Would you like to sign up?")
+            if (signUp === true){
+                this.setState({redirectSignUp : true})
+            } else{
+                alert("Thank you")
+                window.close()
+            }
         }
-
-        this.setState({redirectSignUp : true})
     }
 
     declineInvite = () =>{        
@@ -58,6 +67,7 @@ class JoinClub extends Component{
             this.setState({redirect : true})
         } else {
             //close the window tab
+            window.close()
         }
     }
 

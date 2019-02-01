@@ -14,9 +14,12 @@ class VerifyEmail extends Component{
     componentDidMount = async () => {
         const email = localStorage.getItem("Email")
         if (email){
+            let userEmailVerified, userID;
             const getUserCollection =  await db.collection('Users').where("Email", "==", email).get()
-            const userID = getUserCollection.docs[0].id
-            const userEmailVerified = userID._document.proto.fields.EmailVerified.booleanValue
+            getUserCollection.forEach((snapshot)=>{
+                userEmailVerified = snapshot.data().EmailVerified
+                userID = snapshot.id
+            })
             if(userEmailVerified === false){
                 db.collection('Users').doc(userID)
                 .update({

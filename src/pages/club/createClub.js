@@ -9,7 +9,6 @@ class CreateClub extends Component{
     constructor(props){
         super(props)
         this.state = {
-            name : '',
             email : '', 
             clubName : '', 
             clubType : '', 
@@ -20,12 +19,14 @@ class CreateClub extends Component{
         }
     }
 
-    handleNameInput = (e) => {
-        this.setState({name : e.target.value})
-    }
-
-    handleEmailInput = (e) => {
-        this.setState({email : e.target.value})
+    componentDidMount(){
+        const loader = document.getElementById('loader').style
+        loader.display = 'block'  //activate loader
+       const user =  fire.auth().currentUser
+       if (user){
+        this.setState({email : user.email})
+       }
+       loader.display = 'none'
     }
 
     handleClubName = (e) => {
@@ -44,7 +45,7 @@ class CreateClub extends Component{
         e.preventDefault();
         const loader = document.getElementById('loader').style
         loader.display = 'block' //start loader
-        if (this.state.name === '' || this.state.email === '' || this.state.clubName === '' || this.state.clubType === '' || this.state.memberLimit === ''){
+        if (this.state.email === '' || this.state.clubName === '' || this.state.clubType === '' || this.state.memberLimit === ''){
             alert ("Fill in all fields"); 
             loader.display = 'none'
         } else { 
@@ -68,7 +69,7 @@ class CreateClub extends Component{
                     console.log(error)
                     alert("Can't create club at the moment, please try again!") //Error message
                 })
-                loader.display = 'none'
+        loader.display = 'none' //stop loader
           }
         }
     }
@@ -87,13 +88,8 @@ class CreateClub extends Component{
                     <div className = "col-md-4 mx-auto card card-body mt-4">
                         <form> 
                             <p>
-                                <label>  Name </label> 
-                                <input type = "text" onChange = {this.handleNameInput} className = "form-control"/>
-                            </p>
-
-                            <p>
                                 <label> Email </label>
-                                <input type = "email" onChange = {this.handleEmailInput} className = "form-control"/>
+                                <input type = "email" disabled = {true} value = {this.state.email} className = "form-control"/>
                             </p>
 
                             <p>
