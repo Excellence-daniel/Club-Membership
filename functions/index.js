@@ -53,9 +53,9 @@ exports.firestoreInviteEmail = functions.firestore
         const adminEmail = newData.AdminEmail
         const clubName = newData.ClubName
         const clubtype = newData.ClubType
-        const allMembers = newData.Members;
+        const allMembers = newData.Invites;
         const currentMemberID = allMembers.length - 1 
-        const currentMemberEmail = allMembers[currentMemberID].email
+        const currentMemberEmail = allMembers[0].email
         console.log("NEW EMAIL", currentMemberEmail)
         const url = `localhost:3000/club/joinClub?email=${currentMemberEmail}&adminEmail=${adminEmail}&clubname=${clubName}&clubtype=${clubtype}`
                 if (newData){

@@ -18,19 +18,19 @@ class EditClub extends Component{
         }
     }
     componentDidMount = async(props)=>{
-        const loader = document.getElementById('loader').style
+        const loader = document.getElementById('loader').style      //start loader 
         loader.display = 'block'
-        const clubId = this.props.location.state.id
-        const clubb = await db.collection('Clubs').doc(clubId).get() 
-        const clubData = clubb.data()
+        const clubId = this.props.location.state.id     //get the ID sent from the viewClubs page
+        const clubb = await db.collection('Clubs').doc(clubId).get()    //get data with the clubID as ref
+        const clubData = clubb.data()   //get data
         console.log(clubb.data())       
-        this.setState({id : clubId , 
+        this.setState({id : clubId ,   
                     name:clubData.AdminName, 
                     email : clubData.AdminEmail, 
                     clubname :clubData.ClubName, 
                     clubtype : clubData.ClubType, 
                     membersLimit : clubData.MemberLimit
-                    })
+                    })                                      //set form value to equal the data fetched 
         loader.display = 'none'
     }
 
@@ -48,12 +48,12 @@ class EditClub extends Component{
 
     updateClubDetails = async () =>{
         const loader = document.getElementById('loader').style
-        loader.display = 'block'
+        loader.display = 'block'    //start loader
         await db.collection('Clubs').doc(this.state.id)
         .update({
            ClubName : this.state.clubname, 
            ClubType : this.state.clubtype,
-           MemberLimit : this.state.membersLimit
+           MemberLimit : this.state.membersLimit    //update collection Clubs
        }).then((u) => {
         this.setState({redirect : true});
         alert("Updated Club Successfully!")
@@ -63,6 +63,7 @@ class EditClub extends Component{
      })
        loader.display = 'none'
     }
+    
     render(){
         if (this.state.redirect === true){
             return <Redirect to = "/club/viewClubs"/>

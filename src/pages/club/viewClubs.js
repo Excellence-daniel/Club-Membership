@@ -21,85 +21,97 @@ class ViewClubs extends Component {
         }
     }
 
-componentDidMount(){        
-    const loader = document.getElementById('loader').style
-    loader.display = 'block'
-    fire.auth().onAuthStateChanged(async (user) => {
-        const self = this
-        const allClubs =  [] //an object that take all clubs of the user
-        let allClubsID = [] //an array to take the ids of the clubs respectively
+componentDidMount=async()=>{        
+    let loader = document.getElementById('loader').style
+    loader.display = "block"
+    const allClubs =  [] //an object that take all clubs of the user
+    let allClubsID = [] //an array to take the ids of the clubs respectively
+    let clubsjjoined = []
+    fire.auth().onAuthStateChanged(async (user) => {        
         if (user){
-            const clubs = await db.collection('Clubs').where("AdminEmail", "==", user.email).get() 
+            const clubs = await db.collection('Clubs').where("AdminEmail", "==", user.email).get() //get all information on the clubs created with the admin email
             await clubs.forEach(querySnapshot => {
-                                console.log("QUERY", querySnapshot.data())
-                                allClubs.push(querySnapshot.data())
-                                allClubsID.push(querySnapshot.id)
+                                console.log("QUERY", querySnapshot.data())  
+                                allClubs.push(querySnapshot.data()) //the object returned is pushed into an array
+                                allClubsID.push(querySnapshot.id) // the ID of the respective object/club is stored into the array into
                             })
-            // console.log("DJSKD",clubss)
+            console.log("ALLL", allClubsID, allClubs)
+            this.setState({clubs : allClubs, clubsID : allClubsID}) //set state with allClubs, allClubsID
 
+            const clubsjoinedArr = await db.collection('Users').where("Email", "==", user.email).get()
+            await clubsjoinedArr.forEach(querySnapshot =>{
+                console.log("CLUBS JOINED", querySnapshot.data())
+                clubsjjoined.push(querySnapshot.data().ClubsJoined)
+            })
+            this.setState({clubsjoinned : clubsjjoined})
+            console.log("CLUBS JOINED", clubsjjoined)
+        }
+    })
 
-    //         console.log() 
-    //         .then((querySnapshot) => {
-    //             querySnapshot.forEach(function(doc) {
-    //                 allClubs.push(doc.data())
-    //                 allClubsID.push(doc.id)
-    //             });
-               
-    //                 console.log({allClubs})
-    //                 self.setState({clubs : [...self.state.clubs, ...allClubs], clubsID : [...self.state.clubsID, ...allClubsID]})
-                
-    //         })
-    //         .catch(function(error) {
-    //             console.log("Error getting documents: ", error);
-    //         });
-
-    //         const clubsjoinedArr = [];
-    //         db.collection('Users').where("Email", "==", user.email).get()
-    //             .then((querySnapshot) => {
-    //             querySnapshot.forEach(function(doc) {
-    //                 console.log("JOINED", doc.data().ClubsJoined)
-    //                 let previousClubsJoined = doc.data().ClubsJoined
-
-    //                 clubsjoinedArr.push(previousClubsJoined)
-    //                 })
-    //                 console.log({clubsjoinedArr})
-    //             })
-    //                 console.log({clubsjoinedArr})
-    //                 this.setState({clubsjoinned : clubsjoinedArr})
-    //                 console.log("CLUBS", this.state.clubs)
-
-
-
-
-    //         // console.log("gftdetfghkj", self.state.clubsjoinned)
-    //         loader.display ='none'
-    //     }
-    // })
-    // console.log("CHECK", this.state.clubs, this.state.clubsID, this.state.clubsjoinned)
-}})}
+    loader.display = "none"
+}
 
 deleteClub = (e) => {
     const loader = document.getElementById('loader').style
     loader.display = 'block'
-    var id = e.target.id
-    db.collection('Clubs').doc(id).delete()
-    .then((data) => {
-        alert("Club Deleted!")
-        this.setState({redirect : true})
-    })
-    .catch((error) => {
-        alert("Error. Try Again!")
-        console.log(error)
-    })
-    //console.log("ID", id)
+    let deleteCClub = window.confirm("Are you sure you want to delete this club?")
+    if (deleteCClub === true){
+        var id = e.target.id
+        db.collection('Clubs').doc(id).delete()  //use club detail ID to delete from Clubs collection
+        .then(() => {
+            alert("Club Deleted!")
+            this.setState({redirect : true})
+        })
+        .catch((error) => {
+            alert("Error. Try Again!")
+            console.log(error)
+        })
+    }
     loader.display = 'none'
 }
 
 leaveClub = async (e) => {
+    var oldClubsJoined, userProfileId, clubMembers, clubInvites, clubIId;
     var id = e.target.id
-    const jiji = await db.collection('Clubs').doc(id).get()
-    console.log(jiji.data())
-    
+    var leaveCClub = window.confirm("Are you sure you want to leave this club?")
+    if (leaveCClub === true){
+        //reset in the clubsJoined array in Users 
+        var user = fire.auth().currentUser
+        const getClubsJoined = await db.collection('Users').where('Email', '==', user.email).get()
+        getClubsJoined.forEach(snapshot => {
+            oldClubsJoined = snapshot.data().ClubsJoined;   //all clubs joined
+            userProfileId = snapshot.id     //id of the user profile
+        })
+        const getClubId = oldClubsJoined.findIndex(clubs => clubs.Club === id) //get index of club from the array of clubs joined 
+        oldClubsJoined.splice(getClubId, 1) //splice out of the array 
+        await db.collection('Users').doc(userProfileId).update({
+            ClubsJoined : oldClubsJoined    //update/reset the clubs joined
+        })
+        .then(async ()=>{
+            //delete from members and invites of the club
+            const getClubDetails = await db.collection('Clubs').where('ClubName', '==', id).get()
+            getClubDetails.forEach(snapshot => {
+                clubMembers = snapshot.data().Members       //get all the members of the club
+                clubInvites = snapshot.data().Invites       //get all the invites sent of the club
+                clubIId = snapshot.id           //get the Id of the club profile 
+            })
+            console.log(clubMembers, clubInvites)
+
+             const getMemberId = clubMembers.indexOf(user.email)   //get Id/index of the user email in the members array
+             const getMemberIdFromClubInvites = clubInvites.findIndex(invitee => invitee.email === user.email)   //get index of user email in the invites array
+
+             clubMembers.splice(getMemberId, 1)  //splice out user from the club members list
+             clubInvites.splice(getMemberIdFromClubInvites, 1)   //splice out user from the invites list 
+
+            await db.collection('Clubs').doc(clubIId).update({
+                Members : clubMembers,       //update members list 
+                Invites : clubInvites        //update invites array
+            }).then(()=> {
+                alert("You have left the club!")
+            })
+            this.setState({redirect : true})
+        })        
+    }        
 }
 
 showMembers = () => {
@@ -107,9 +119,11 @@ showMembers = () => {
 }
 
 joinedClub = () => {
-    return  this.state.clubs.length > 0 ? 
-        this.state.clubsjoinned.map((club, id) => (
+    console.log(this.state.clubsjoinned)
+    return  this.state.clubsjoinned.length > 0 ? 
+        this.state.clubsjoinned[0].map((club, id) => (
             <tr key = {id}>
+
             <td> {club.Club} </td>
             <td> {club.Type} </td>
             <td> 
@@ -119,9 +133,9 @@ joinedClub = () => {
             </td>
             </tr>
         )) :
-            <div style = {{fontSize : '20px'}}>
-                <center> No Clubs Available </center>  
-            </div> 
+            <div style = {{fontSize : '15px'}}>
+                    No Clubs Available 
+            </div>  
 }
 createdClubs = () => {
     return this.state.clubs.length > 0 ? 
@@ -129,7 +143,7 @@ createdClubs = () => {
                 <tr key = {id}>
                     <td> {club.ClubName} </td>
                     <td> {club.ClubType} </td>
-                    <td> {club.Email} </td> 
+                    <td> {club.AdminEmail} </td> 
                     <td> {club.MemberLimit} </td> 
                     <td> 
                         <Link to = {{pathname : "/club/editClub", state : ({id: this.state.clubsID[id]})}}>      
@@ -140,14 +154,15 @@ createdClubs = () => {
                     </td>
                 </tr>                    
             )) :
-                <div style = {{fontSize : '20px'}}>
-                    <center> No Clubs Available </center>  
+                <div style = {{fontSize : '15px'}}>
+                    No Clubs Available 
                 </div> 
 }
 
 render(){
     if (this.state.redirect === true){
-        return <Redirect to = "/club/ViewClubs"/>
+        return <Redirect to = "/"/>                                                                                                                                    
+
     }
     return (
         <div className = "col-md-12">
@@ -173,7 +188,11 @@ render(){
 
                         {/* Created Clubs */}
         <br/>
-            <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/></center></div>
+            <div>
+                <center>
+                    <img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/>
+                </center>
+            </div>
         <br/>
 
                 <div>
@@ -193,7 +212,8 @@ render(){
                     </table> 
                 </div>
             </div>
-            <div className = "col-md-2"></div>            
+            <div className = "col-md-2">
+            </div>            
         </div>
     )
 }
