@@ -25,7 +25,7 @@ class ViewProfile extends Component{
         const self = this
         if (user){
         var users = db.collection('Users')
-        var query = users.where ('Email', '==', user.email).get()
+        users.where ('Email', '==', user.email).get()
             .then((snapshot) => {
                 snapshot.forEach((doc,id) =>{
                     console.log("Doc Data: ", doc.data())
