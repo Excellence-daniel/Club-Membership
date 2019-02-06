@@ -71,8 +71,9 @@ deleteClub = (e) => {
 }
 
 leaveClub = async (e) => {
-    var oldClubsJoined, userProfileId, clubMembers, clubInvites, clubIId;
     var id = e.target.id
+    var oldClubsJoined,clubMembers, clubInvites = []
+    var userProfileId, clubIId;
     var leaveCClub = window.confirm("Are you sure you want to leave this club?")
     if (leaveCClub === true){
         //reset in the clubsJoined array in Users 

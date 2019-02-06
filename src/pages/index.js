@@ -18,6 +18,7 @@ class LandingPage extends Component{
         var club = localStorage.getItem("ClubJoined")
         if (club){
             var user = fire.auth().currentUser
+            console.log("USER", user)
             if (user){
             const gUser = db.collection('Users').where("Email", "==", user.email)
             let userID, Clubssjoined;

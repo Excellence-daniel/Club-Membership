@@ -26,7 +26,9 @@ class JoinClub extends Component{
     acceptInvite = async () => {
         var newClub = {"Club":this.state.clubname, "Type":this.state.clubtype}
         const getUserData = await db.collection('Users').where('Email', "==", this.state.email).get() //get user details using emails as ref 
-        let user, userId, clubInvites, clubMembers, clubId;
+        let user, userId, clubId;
+        let clubMembers = []
+        let clubInvites = []
         getUserData.forEach((snapshot)=>{
             console.log("DTATA",snapshot.data())
             user = snapshot.data()  //object data of the user
@@ -42,26 +44,31 @@ class JoinClub extends Component{
             .update({
                 ClubsJoined : joinedClubs    //update the clubs joined array in the 'Users' collection of the user 
             })
+            .then(async()=>{
+                //update the members array in collection 'Clubs'
+                const getClub = await db.collection('Clubs').where("ClubName", "==", this.state.clubname).get()
+                getClub.forEach((snapshot) => {
+                    console.log("SNAPSNAP", snapshot.data())
+                    clubMembers = snapshot.data().Members       //get members of the club
+                    clubInvites = snapshot.data().Invites       //get invites array in club
+                    clubId = snapshot.id                        //get Id of club
+                })
 
-            //update the members array in collection 'Clubs'
-            const getClub = await db.collection('Clubs').where("ClubName", "==", this.state.clubname).get()
-            getClub.forEach((snapshot) => {
-                console.log("SNAPSNAP", snapshot.data())
-                clubMembers = snapshot.data().Members       //get members of the club
-                clubInvites = snapshot.data().Invites       //get invites array in club
-                clubId = snapshot.id                        //get Id of club
-            })
+                console.log(clubInvites)
+                clubMembers.push(this.state.email)      //add the new email to the list of member emails
+                let memberindex = clubInvites.findIndex(invitee => invitee.email === this.state.email)  //get index of object with email as ref
+                if(memberindex >= 0){
+                    console.log(memberindex)
+                    clubInvites[memberindex].accepted = true    //set invite accepted option to true
+                }
 
-            clubMembers.push(this.state.email)      //add the new email to the list of member emails
-            let memberindex = clubInvites.findIndex(invitee => invitee.email === this.state.email)  //get index of object with email as ref
-            clubInvites[memberindex].accepted = true    //set invite accepted option to true
-
-            await db.collection('Clubs').doc(clubId).update({       //update 
-                Members : clubMembers,
-                Invites : clubInvites
-            }).then(()=>{
-                alert("You have joined the club!")
-                this.setState({redirect : true})
+                await db.collection('Clubs').doc(clubId).update({       //update 
+                    Members : clubMembers,
+                    Invites : clubInvites
+                }).then(()=>{
+                    alert("You have joined the club!")
+                    this.setState({redirect : true})
+                })
             })
         } else {
             localStorage.setItem("ClubJoined", newClub)
@@ -91,14 +98,14 @@ class JoinClub extends Component{
         } else if (this.state.redirectSignUp) {
             return <Redirect to = "/signup"/>
         }
-        const {email, clubname, adminName} = this.state
+        const {email, clubname, adminEmail} = this.state
         return (
         <div className = "container">
             <div className = "row">
                 <div class = "col-md-12">
                     <h3> Hey {email}, 
                             <br/>
-                            You have been sent an invite by {adminName} to join {clubname} on our app. Click on the either of the buttons below to respond.
+                            You have been sent an invite by {adminEmail} to join {clubname} on our app. Click on the either of the buttons below to respond.
                     </h3>
                     <p>
                         <button className = "btn btn-success" onClick = {this.acceptInvite}> Accept Invite </button>
