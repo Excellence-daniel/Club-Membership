@@ -62,8 +62,19 @@ class CreateClub extends Component{
                     Invites : []
                 })            
                 .then(async () => {
-                    alert("Club Created!") //display on success
+                    let userID;
                     localStorage.setItem("Club", this.state.clubName) //set localStorage to clubName
+                    const getUser = await db.collection('Users').where('Email', '==', user.email).get()
+                    console.log(getUser)
+                    getUser.forEach(async (snapshot)=>{
+                        console.log(snapshot.data())
+                        userID = snapshot.id
+                        console.log(userID)
+                        db.collection('Users').doc(userID).update({
+                            Admin : true
+                        })
+                    })
+                    alert('Club Created Successfully!')
                     this.setState({redirect : true}) //enable redirect the page to view club
                 }).catch((error) => {
                     console.log(error)

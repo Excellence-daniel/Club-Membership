@@ -22,8 +22,8 @@ class ViewClubs extends Component {
     }
 
 componentDidMount=async()=>{        
-    let loader = document.getElementById('loader').style
-    loader.display = "block"
+    const loader = document.getElementById('loader').style
+    loader.display = 'block'
     const allClubs =  [] //an object that take all clubs of the user
     let allClubsID = [] //an array to take the ids of the clubs respectively
     let clubsjjoined = []
@@ -48,7 +48,7 @@ componentDidMount=async()=>{
         }
     })
 
-    loader.display = "none"
+    loader.display = 'none'
 }
 
 deleteClub = (e) => {
@@ -191,7 +191,7 @@ render(){
         <br/>
             <div>
                 <center>
-                    <img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/>
+                    <img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '5%'}} id = "loader"/>
                 </center>
             </div>
         <br/>

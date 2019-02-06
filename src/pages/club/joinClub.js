@@ -72,7 +72,7 @@ class JoinClub extends Component{
             })
         } else {
             localStorage.setItem("ClubJoined", JSON.stringify(newClub))
-            var signUp = window.confirm("You have to sign up before you can join this club. Would you like to sign up?")
+            var signUp = window.confirm("You have to sign up before you can any club. Would you like to sign up?")
             fire.auth().signOut() 
             if (signUp === true){
                 this.setState({redirectSignUp : true})
@@ -107,6 +107,8 @@ class JoinClub extends Component{
                     <h3> Hey {email}, 
                             <br/>
                             You have been sent an invite by {adminEmail} to join {clubname} on our app. Click on the either of the buttons below to respond.
+                            <br/>
+                            If you are a new user,by accepting this invite, you would have to sign up first and accept the invite again. 
                     </h3>
                     <p>
                         <button className = "btn btn-success" onClick = {this.acceptInvite}> Accept Invite </button>
