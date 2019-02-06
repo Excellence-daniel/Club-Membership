@@ -22,7 +22,8 @@ class LandingPage extends Component{
             console.log("USER", user)
             if (user){
             const gUser = db.collection('Users').where("Email", "==", user.email)
-            let userID, Clubssjoined;
+            let userID;
+            let Clubssjoined = [];
             if (gUser !== null){
                 gUser.forEach((snapshot)=>{
                 userID = snapshot.id
