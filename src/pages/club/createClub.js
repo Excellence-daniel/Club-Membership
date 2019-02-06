@@ -22,11 +22,11 @@ class CreateClub extends Component{
     componentDidMount(){
         const loader = document.getElementById('loader').style
         loader.display = 'block'  //activate loader
-       const user =  fire.auth().currentUser
-       if (user){
-        this.setState({email : user.email})
-       }
-       loader.display = 'none'
+        const user =  fire.auth().currentUser
+        if (user){
+        this.setState({email : user.email}) //set email on load of the page 
+        }
+        loader.display = 'none'
     }
 
     handleClubName = (e) => {
@@ -49,7 +49,7 @@ class CreateClub extends Component{
             alert ("Fill in all fields"); 
             loader.display = 'none'
         } else { 
-           const user =  fire.auth().currentUser
+           const user =  fire.auth().currentUser //get the current user 
            if (user.email !== this.state.email){
                alert("You have to use a registered email or be logged in before you can create club.")
             } else {
@@ -59,7 +59,7 @@ class CreateClub extends Component{
                     ClubType : this.state.clubType, 
                     MemberLimit : this.state.memberLimit, 
                     Members : [], 
-                    Inivites : []
+                    Invites : []
                 })            
                 .then(async () => {
                     alert("Club Created!") //display on success
