@@ -18,16 +18,20 @@ class LandingPage extends Component{
         var club = localStorage.getItem("ClubJoined")
         if (club){
             var user = fire.auth().currentUser
+            if (user){
             const gUser = db.collection('Users').where("Email", "==", user.email)
             let userID, Clubssjoined;
-            gUser.forEach((snapshot)=>{
+            if (gUser !== null){
+                gUser.forEach((snapshot)=>{
                 userID = snapshot.id
                 Clubssjoined = snapshot.ClubsJoined
-            })
+                })
+            }
             Clubssjoined.push(club)
             db.collection('Users').doc(userID).update({
                 ClubsJoined : Clubssjoined 
             })
+        }
             localStorage.removeItem("ClubJoined")
         }
     }
