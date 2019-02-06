@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import {parse} from 'query-string'
 
-import {fire,db} from '../config/fire'
+import {db} from '../config/fire'
 
 class JoinClub extends Component{
     constructor(props){
@@ -24,32 +24,46 @@ class JoinClub extends Component{
     }
 
     acceptInvite = async () => {
-        // alert("Yay!. You have to sign up on the app.")
         var newClub = {"Club":this.state.clubname, "Type":this.state.clubtype}
-        const getUserData = await db.collection('Users').where('Email', "==", this.state.email).get()
-        console.log("DHJJ", getUserData)
-        let user;
-        let userId;
+        const getUserData = await db.collection('Users').where('Email', "==", this.state.email).get() //get user details using emails as ref 
+        let user, userId, clubInvites, clubMembers, clubId;
         getUserData.forEach((snapshot)=>{
             console.log("DTATA",snapshot.data())
-            user = snapshot.data()
-            userId = snapshot.id
-            console.log("ID", snapshot.id)
+            user = snapshot.data()  //object data of the user
+            userId = snapshot.id    //id of the user in firebase
         })
 
-        if (user){
-            const joinedClubs = user.ClubsJoined
-            joinedClubs.push(newClub)
-            await db.collection('Users').doc(userId).update({
-               ClubsJoined : joinedClubs
+        // if a user is gotten 
+        if(user){
+            const joinedClubs = user.ClubsJoined    //get all the clubs the user has joined
+            joinedClubs.push(newClub)   //push the new club into that array
+            console.log(userId)
+            await db.collection('Users').doc(userId)
+            .update({
+                ClubsJoined : joinedClubs    //update the clubs joined array in the 'Users' collection of the user 
             })
-            const clubDet = await db.collection('Clubs').where("AdminEmail", "==", this.state.adminEmail)
-            console.log("CLUBDET",clubDet)
 
-            alert("You have joined the club!")
-            this.setState({redirect : true})
+            //update the members array in collection 'Clubs'
+            const getClub = await db.collection('Clubs').where("ClubName", "==", this.state.clubname).get()
+            getClub.forEach((snapshot) => {
+                console.log("SNAPSNAP", snapshot.data())
+                clubMembers = snapshot.data().Members       //get members of the club
+                clubInvites = snapshot.data().Invites       //get invites array in club
+                clubId = snapshot.id                        //get Id of club
+            })
+
+            clubMembers.push(this.state.email)      //add the new email to the list of member emails
+            let memberindex = clubInvites.findIndex(invitee => invitee.email === this.state.email)  //get index of object with email as ref
+            clubInvites[memberindex].accepted = true    //set invite accepted option to true
+
+            await db.collection('Clubs').doc(clubId).update({       //update 
+                Members : clubMembers,
+                Invites : clubInvites
+            }).then(()=>{
+                alert("You have joined the club!")
+                this.setState({redirect : true})
+            })
         } else {
-            console.log("DDSWEEE")
             localStorage.setItem("ClubJoined", newClub)
             var signUp = window.confirm("You have to sign up before you can join this club. Would you like to sign up?")
             if (signUp === true){
