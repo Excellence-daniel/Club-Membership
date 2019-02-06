@@ -35,7 +35,7 @@ class VerifyEmail extends Component{
             }
             this.setState({redirect : true});
         } else {
-            alert ("No user! Get out!")
+            alert ("No user! Go sign up!")
             this.setState({redirect : true})
         }
     }    
