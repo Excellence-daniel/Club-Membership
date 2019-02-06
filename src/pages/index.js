@@ -16,6 +16,7 @@ class LandingPage extends Component{
         var status = localStorage.getItem("LOGIN")
         this.setState({status})
         var club = localStorage.getItem("ClubJoined")
+        console.log(club)
         if (club){
             var user = fire.auth().currentUser
             console.log("USER", user)
@@ -33,7 +34,7 @@ class LandingPage extends Component{
                 ClubsJoined : Clubssjoined 
             })
         }
-            localStorage.removeItem("ClubJoined")
+            
         }
     }
 

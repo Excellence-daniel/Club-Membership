@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import {parse} from 'query-string'
 
-import {db} from '../config/fire'
+import {fire,db} from '../config/fire'
 
 class JoinClub extends Component{
     constructor(props){
@@ -71,8 +71,9 @@ class JoinClub extends Component{
                 })
             })
         } else {
-            localStorage.setItem("ClubJoined", newClub)
+            localStorage.setItem("ClubJoined", JSON.stringify(newClub))
             var signUp = window.confirm("You have to sign up before you can join this club. Would you like to sign up?")
+            fire.auth().signOut() 
             if (signUp === true){
                 this.setState({redirectSignUp : true})
             } else{
