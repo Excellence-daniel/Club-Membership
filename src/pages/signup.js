@@ -39,9 +39,11 @@ import Header from './header'
 
      signup = async (e) => {
         e.preventDefault();
-        
+        let loader = document.getElementById('loader').style 
+        loader.display = "block"
         if(this.state.name === '' || this.state.email === '' || this.state.address === '' || this.state.phone === '' || this.state.password === '' ){
             alert('Fill all fields.')
+            loader.display = "none"
         } else {            
         const self = this
         await fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password) //create user with email and password in auth
@@ -77,6 +79,7 @@ import Header from './header'
             console.log("error", error.message)
             alert(error.message + " Please try again")
         })
+        loader.display = "none"
      }
      }
 
@@ -121,6 +124,11 @@ import Header from './header'
                         </p>
 
                         <button className = "btn btn-block btn-secondary" onClick ={this.signup}> SIGN UP </button>
+                        <div className = "mt-2">
+                            <center>
+                                <img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/>
+                            </center>
+                        </div>
                 </div>
                 <div className = "col-md-4"></div>
             </div>
