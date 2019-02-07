@@ -58,14 +58,21 @@ class AddMembers extends Component {
 			const invitee = {"email":this.state.invitedEmail, "accepted" : false}
 			const getClubDetails = await db.collection('Clubs').doc(this.state.clubId).get() //gets club details from firebase
 			const getInvites = await getClubDetails.data().Invites   //get array of Invites
-			getInvites.push(invitee) //push the new invite template into the former invites array
-			await db.collection('Clubs').doc(this.state.clubId).update({
-				Invites : getInvites 		//set array of invites with the new invite
-			})
-			.then(()=> {
-				console.log("Invite Sent!")
-				alert("Invite Sent!")
-			})
+			const getMembersLimit = await getClubDetails.data().getMembersLimit 	//get members limit declared
+			const getMembers = await getClubDetails.data().Members 	//get members in the club
+			const MembersLength = getMembers.length
+			if (MembersLength < getMembersLimit){
+				getInvites.push(invitee) //push the new invite template into the former invites array
+				await db.collection('Clubs').doc(this.state.clubId).update({
+					Invites : getInvites 		//set array of invites with the new invite
+				})
+				.then(()=> {
+					console.log("Invite Sent!")
+					alert("Invite Sent!")
+				})
+			} else {
+				alert ("Cannot send invite, member's limit reached in this club!")
+			}
 			loader.display = 'none'
 			this.setState({redirect : true})
 		}
