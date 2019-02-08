@@ -58,9 +58,11 @@ class AddMembers extends Component {
 			const invitee = {"email":this.state.invitedEmail, "accepted" : false}
 			const getClubDetails = await db.collection('Clubs').doc(this.state.clubId).get() //gets club details from firebase
 			const getInvites = await getClubDetails.data().Invites   //get array of Invites
-			const getMembersLimit = await getClubDetails.data().getMembersLimit 	//get members limit declared
+			const getMembersLimit = await getClubDetails.data().MemberLimit 	//get members limit declared
 			const getMembers = await getClubDetails.data().Members 	//get members in the club
 			const MembersLength = getMembers.length
+
+			console.log(MembersLength, getMembersLimit)
 			if (MembersLength < getMembersLimit){
 				getInvites.push(invitee) //push the new invite template into the former invites array
 				await db.collection('Clubs').doc(this.state.clubId).update({
