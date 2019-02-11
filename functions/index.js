@@ -46,12 +46,12 @@ exports.firestoreValidateNewUsers = functions.firestore
 exports.firestoreInviteEmail = functions.firestore
     .document('Clubs/{ClubsId}')
     .onUpdate((change, context) => new Promise((resolve, reject) => {
-        const newData = change.after.data()
+        const newData = change.after.data()         //data that just entered firebase
         console.log("NEW DATA", newData)
-        const adminEmail = newData.AdminEmail
-        const clubName = newData.ClubName
-        const clubtype = newData.ClubType
-        const allMembers = newData.Invites;
+        const adminEmail = newData.AdminEmail   //AdminEmail value of the new data 
+        const clubName = newData.ClubName       //ClubName value of the new data 
+        const clubtype = newData.ClubType       //ClubType value of the new data 
+        const allMembers = newData.Invites;     //Invites array of the new data
         const currentMemberID = allMembers.length - 1
         const currentMemberEmail = allMembers[currentMemberID].email
         console.log("NEW EMAIL", currentMemberEmail)
