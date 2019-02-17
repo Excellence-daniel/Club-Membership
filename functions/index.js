@@ -61,7 +61,7 @@ exports.firestoreInviteEmail = functions.firestore
             const msg = {
                 to: currentMemberEmail,
                 from: 'ClubMembershipapp@gmail.com',
-                subject: 'Verify Email',
+                subject: 'Club Invite',
                 html: `
                             <strong> Hey. An invite was sent to you by ${adminEmail} to join a club on our app. Click on the link below to view.  </strong>
                                 <br> <br>

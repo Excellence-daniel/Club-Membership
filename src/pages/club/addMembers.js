@@ -17,8 +17,10 @@ class AddMembers extends Component {
 	}
 
 	componentDidMount= async()=>{
-		const loader = document.getElementById('loader').style 
-		loader.display = 'block'    //start loader
+		const loader = '<img src ="../img/loader.gif" style = "width : 8%"/>'
+		const teeext = 'Send Invite'
+		var actionn = document.getElementById('actionn')
+		actionn.innerHTML = loader 
 		var user = fire.auth().currentUser //get current user object
 		if (user){
 			const getClubs = await db.collection('Clubs').where("AdminEmail", "==", user.email).get()   //get club data using user email
@@ -28,11 +30,12 @@ class AddMembers extends Component {
 				clubnames.push(clubname)            //push into the array clubnames
 			})
 			this.setState({clubs: clubnames})       //set array clubnames into state clubs[]
+			actionn.textContent = teeext
 		} else {
 			console.log("No user")
+			alert('Login to invite to a club')
+			actionn.textContent = teeext
 		}
-
-		loader.display = 'none' //stop loader
 		console.log("STATE CLUBS ", this.state.clubs)
 	}
 
@@ -49,11 +52,13 @@ class AddMembers extends Component {
 	}
 
 	inviteMembers = async () => {
-		const loader = document.getElementById('loader').style 
-		loader.display = 'block'
+		const loader = '<img src ="../img/loader.gif" style = "width : 10%"/>'
+		const teeext = 'Send Invite'
+		var actionn = document.getElementById('actionn')
+		actionn.innerHTML = loader 
 		if (this.state.invitedEmail === '' || this.state.inviteToClub === ''){
 			alert("Fill in the fileds")
-			loader.display = 'none'
+			actionn.textContent = teeext
 		} else {
 			const invitee = {"email":this.state.invitedEmail, "accepted" : false}
 			const getClubDetails = await db.collection('Clubs').doc(this.state.clubId).get() //gets club details from firebase
@@ -71,11 +76,12 @@ class AddMembers extends Component {
 				.then(()=> {
 					console.log("Invite Sent!")
 					alert("Invite Sent!")
+					actionn.textContent = teeext
 				})
 			} else {
 				alert ("Cannot send invite, member's limit reached in this club!")
+				actionn.textContent = teeext
 			}
-			loader.display = 'none'
 			this.setState({redirect : true})
 		}
 	}
@@ -105,9 +111,8 @@ class AddMembers extends Component {
 								))}
 							</select>
 							<br/>
-							<div><button class = "btn btn-danger btn-block" onClick = {this.inviteMembers}> INVITE </button></div>
+							<div><button class = "btn btn-danger btn-block" id = "actionn" style = {{padding : '20px'}} onClick = {this.inviteMembers}> Send Invite </button></div>
 						</center>
-						<div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/></center></div>
 					</div>
 					<div className = "col-md-4"></div>
 				</div>

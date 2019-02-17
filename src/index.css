@@ -6772,3 +6772,17 @@ li {
   display : inline;
   padding : 8px;
 }
+.form-control {
+   border-radius : 0px;
+ }
+ input:focus {
+  border: 3px solid #555;
+}
+
+.btn{
+  border-radius : 0px;
+}
+
+.deff{ 
+width : 30%;
+}

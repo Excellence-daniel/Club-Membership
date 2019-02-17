@@ -43,15 +43,17 @@ class CreateClub extends Component{
 
     onCreateClub = async (e) => {
         e.preventDefault();
-        const loader = document.getElementById('loader').style
-        loader.display = 'block' //start loader
+        let actionn = document.getElementById('actionn')
+        let loader = `<img src = '../img/loader.gif' style = 'width : 10%'/>`
+        actionn.innerHTML = loader
         if (this.state.email === '' || this.state.clubName === '' || this.state.clubType === '' || this.state.memberLimit === ''){
             alert ("Fill in all fields"); 
-            loader.display = 'none'
+            actionn.textContent = 'Create Club'
         } else { 
            const user =  fire.auth().currentUser //get the current user 
            if (user.email !== this.state.email){
                alert("You have to use a registered email or be logged in before you can create club.")
+               actionn.textContent = 'Create Club'
             } else {
                 db.collection('Clubs').add({
                     AdminEmail : this.state.email,
@@ -79,8 +81,8 @@ class CreateClub extends Component{
                 }).catch((error) => {
                     console.log(error)
                     alert("Can't create club at the moment, please try again!") //Error message
+                    actionn.textContent = 'Create Club'
                 })
-        loader.display = 'none' //stop loader
           }
         }
     }
@@ -111,10 +113,12 @@ class CreateClub extends Component{
                             <p> 
                                 <label> Club Type </label>
                                 <select onChange = {this.handleClubType} className = "form-control"> 
-                                    <option value = ""> SELECT A CLUB TYPE </option>
+                                    <option value = "" selected disabled> SELECT A CLUB TYPE </option>
                                     <option value = "Game"> Game </option> 
                                     <option value = "Book"> Book </option>
-                                    <option value = "State Affairs"> State Affairs Discussion </option> 
+                                    <option value = "Sport"> Sport </option> 
+                                    <option value = "Politics"> Politics </option>
+                                    <option value = "Charity"> Charity </option>  
                                 </select>
                             </p>
 
@@ -122,7 +126,7 @@ class CreateClub extends Component{
                                 <label> Members Limit </label>
                                 <input type = "number" onChange ={this.handleMemberLimit} className = "form-control"/>
                             </p>
-                            <button onClick = {this.onCreateClub} className = "btn btn-success btn-block"> CREATE CLUB </button>
+                            <button onClick = {this.onCreateClub} className = "btn btn-success btn-block" id = "actionn" style = {{padding : '15px'}}> Create Club </button>
                         </form>
                     <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '20%'}} id = "loader"/></center></div>
                     </div>                                                

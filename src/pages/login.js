@@ -25,34 +25,35 @@ class LoginUser extends Component {
 
     login = async (e) => {
         e.preventDefault();
-        const loader = document.getElementById('loader').style
-        loader.display = 'block' //start loader
+        let actionn = document.getElementById('actionn')
+        let loader = `<img src = '../img/loader.gif' style = 'width : 5%'/>`
+        actionn.innerHTML = loader
         const {email, password} =  this.state
         if (email === '' || password === ''){
             alert("Fill in all fields")
-            loader.display = 'none'
+            actionn.innerText = 'Login To Proceed'
         }else {
             const getUserCollection =  await db.collection('Users').where("Email", "==", email).get() //get users from data with the email specified
             let getUserEmailVer; 
             getUserCollection.forEach((snapshot)=>{
             getUserEmailVer = snapshot.data().EmailVerified  //status of email verification
-        })
-        loader.display = 'none' //stop the loader
+            })
 
-        if (getUserEmailVer === false){
-            alert("Verify your email before you login")
-            this.setState({redirect : true})
-        } else {
+            if (getUserEmailVer === false){
+                alert("Verify your email before you login")
+                this.setState({redirect : true})
+            } else {
                 fire.auth().signInWithEmailAndPassword(email, password).then((u)=> {
                 console.log(u , "SUCCESS");
                 alert("You are logged in");
                 this.setState({redirect : true})            
-            }).catch((error)=>{
-                console.log(error)
-                alert("Wrong Email or Password. Try Again!")
-            })
+                }).catch((error)=>{
+                    console.log(error)
+                    alert("Wrong Email or Password. Try Again!")
+                    actionn.innerText = 'Login To Proceed'
+                })
+                }
             }
-        }
     }      
 
     render(){
@@ -66,22 +67,19 @@ class LoginUser extends Component {
                 <div className = "col-md-12">
                     <Header/>
                 </div>
-                <div className = "col-md-5"></div>
-                <div className = "col-md-2 mt-5"> 
+                <div className = "col-md-4"></div>
+                <div className = "col-md-4 mt-5"> 
                     <form>
                         <p>
-                            <label> Email Address </label>
-                            <input type ="email" onChange = {this.handleEmailInput} className ="form-control"/>
+                            <input type ="email" placeholder = "Email" onChange = {this.handleEmailInput} className ="form-control"/>
                         </p>
                         <p>
-                            <label> Password </label>
-                            <input type = "password" onChange = {this.handlePasswordInput} className = "form-control"/>
+                            <input type = "password" placeholder = "Password" onChange = {this.handlePasswordInput} className = "form-control"/>
                         </p>
-                        <button className = "btn btn-primary btn-block" onClick = {this.login}> LOGIN </button>
+                        <button className = "btn btn-block btn-primary" id = "actionn" style = {{padding : '15px'}} onClick ={this.login}> Login To Proceed </button>
                     </form>
-                    <div className = ""><center><img src = "img/loader.gif" alt = "loader" style = {{display : 'none', width: '30%'}} id = "loader"/></center></div>       
                 </div>
-                <div className = "col-md-5"></div>
+                <div className = "col-md-4"></div>
             </div>
         )
     }

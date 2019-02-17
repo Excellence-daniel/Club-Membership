@@ -18,8 +18,10 @@ class VerifyEmail extends Component {
         if (email) {
             let userEmailVerified, userID;
             const getUserCollection = await db.collection('Users').where("Email", "==", email).get()
+            console.log("Check this", getUserCollection.docs)
             getUserCollection.forEach((snapshot) => {
                 userEmailVerified = snapshot.data().EmailVerified
+                console.log(snapshot.data())
                 userID = snapshot.id
             })
             if (userEmailVerified === false) {

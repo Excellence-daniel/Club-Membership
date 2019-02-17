@@ -47,8 +47,10 @@ class EditClub extends Component{
     }
 
     updateClubDetails = async () =>{
-        const loader = document.getElementById('loader').style
-        loader.display = 'block'    //start loader
+        var actionn = document.getElementById('actionn')
+        const loader = '<img src = "../img/loader.gif" style = "width : 10%"/>'
+        const teeext = 'Update Club'
+        actionn.innerHTML = loader
         await db.collection('Clubs').doc(this.state.id)
         .update({
            ClubName : this.state.clubname, 
@@ -57,11 +59,12 @@ class EditClub extends Component{
        }).then((u) => {
         this.setState({redirect : true});
         alert("Updated Club Successfully!")
+        actionn.textContent = teeext
        }).catch((error) => {
          console.log('error', error);
          alert("Cannot Update Club, try again!")
+         actionn.textContent = teeext
      })
-       loader.display = 'none'
     }
     
     render(){
@@ -87,7 +90,9 @@ class EditClub extends Component{
                             <option value = ""> SELECT A CLUB TYPE </option>
                             <option value = "Game"> Game </option> 
                             <option value = "Book"> Book </option>
-                            <option value = "State Affairs"> State Affairs Discussion </option> 
+                            <option value = "Sport"> Sport </option> 
+                            <option value = "Politics"> Politics </option>
+                            <option value = "Charity">Charity </option> 
                         </select>
                     </p>
                     <p>
@@ -100,9 +105,9 @@ class EditClub extends Component{
                     </p>
                     
                     <p>
-                        <button class = "btn btn-success btn-block" onClick = {this.updateClubDetails}> SAVE </button>
+                        <button class = "btn btn-success btn-block" id ="actionn" style = {{padding: '20px'}} onClick = {this.updateClubDetails}> SAVE </button>
                     </p>
-                    <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '15%'}} id = "loader"/></center></div>
+                    <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/></center></div>
                </div>
 
                <div className = "col-md-4"></div>

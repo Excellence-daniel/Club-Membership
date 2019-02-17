@@ -40,32 +40,59 @@ componentDidMount=async()=>{
 
             const clubsjoinedArr = await db.collection('Users').where("Email", "==", user.email).get()
             await clubsjoinedArr.forEach(querySnapshot =>{
-                console.log("CLUBS JOINED", querySnapshot.data())
                 clubsjjoined.push(querySnapshot.data().ClubsJoined)
             })
             this.setState({clubsjoinned : clubsjjoined})
-            console.log("CLUBS JOINED", clubsjjoined)
+            console.log("CLUBS JOINED ---23", clubsjjoined)
+            console.log("CLUBS JOINED ---24", clubsjjoined.length)
+            console.log("CLUBS JOINED ---25", clubsjjoined[0])
         }
     })
 
     loader.display = 'none'
 }
 
-deleteClub = (e) => {
+deleteClub = async (e) => {
+    var id = e.target.id
+    var clubNamee = e.target.value
     const loader = document.getElementById('loader').style
     loader.display = 'block'
     let deleteCClub = window.confirm("Are you sure you want to delete this club?")
     if (deleteCClub === true){
-        var id = e.target.id
-        db.collection('Clubs').doc(id).delete()  //use club detail ID to delete from Clubs collection
-        .then(() => {
-            alert("Club Deleted!")
-            this.setState({redirect : true})
-        })
-        .catch((error) => {
-            alert("Error. Try Again!")
-            console.log(error)
-        })
+        console.log(clubNamee, "SMFKE")
+        var getClubDets = await db.collection('Clubs').doc(id).get()
+        console.log(getClubDets.data().Members)
+        const clubMembers = getClubDets.data().Members
+        clubMembers.forEach( async (memberMail) => {
+            console.log(memberMail.email)
+            const membersMail = memberMail.email
+            const getRespUsers =  await db.collection('Users').where("Email","==",membersMail).get()
+            getRespUsers.forEach(async (snapshot)=>{
+                let userID = snapshot.id
+                let membersClubJoined = snapshot.data().ClubsJoined
+                let checkClubIndex = membersClubJoined.findIndex(idx => idx.Club === clubNamee)
+                membersClubJoined.splice(checkClubIndex, 1)
+                await db.collection('Users').doc(userID).update({
+                    ClubsJoined : membersClubJoined
+                })
+                .then(()=>{
+                    db.collection('Clubs').doc(id).delete()  //use club detail ID to delete from Clubs collection
+                    .then(() => {
+                        alert("Club Deleted!")
+                        this.setState({redirect : true})
+                    })
+                    .catch((error) => {
+                        alert("Error. Try Again!")
+                        console.log(error, "1")
+                    })
+                })
+                .catch((error)=>{
+                    alert("Error. Try Again!")
+                    console.log(error, "2")
+                })
+            })
+            // let checkClubIndex = memerMai
+        })  
     }
     loader.display = 'none'
 }
@@ -121,17 +148,17 @@ showMembers = () => {
 
 joinedClub = () => {
     console.log(this.state.clubsjoinned)
+    console.log("CLUBS JOINED ", this.state.clubsjoinned.length)
     return  this.state.clubsjoinned.length > 0 ? 
         this.state.clubsjoinned[0].map((club, id) => (
             <tr key = {id}>
-
-            <td> {club.Club} </td>
-            <td> {club.Type} </td>
-            <td> 
-                <button id = {club.Club} onClick = {this.leaveClub} className = "btn btn-warning"> 
-                    LEAVE
-                </button> 
-            </td>
+                <td> {club.Club} </td>
+                <td> {club.Type} </td>
+                <td> 
+                    <button id = {club.Club} onClick = {this.leaveClub} className = "btn btn-warning"> 
+                        LEAVE
+                    </button> 
+                </td>
             </tr>
         )) :
             <div style = {{fontSize : '15px'}}>
@@ -151,7 +178,7 @@ createdClubs = () => {
                             <button className = "btn btn-primary"> EDIT </button>
                         </Link>
                                 &nbsp;  &nbsp;
-                        <button className = "btn btn-danger" id = {this.state.clubsID[id]} onClick ={this.deleteClub}> DELETE </button>
+                        <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> DELETE </button>
                     </td>
                 </tr>                    
             )) :
