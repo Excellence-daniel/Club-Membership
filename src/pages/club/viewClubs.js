@@ -190,16 +190,16 @@ createdClubs = () => {
                                     &nbsp;  &nbsp;
                             <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> Delete</button>
                             &nbsp;  &nbsp;
-                            <button className = "btn dropdown btn-secondary" value = {club.ClubName} data-toggle="collapse" data-parent = "#accordion" data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} onClick ={this.showMembers}> View Members </button>
+                            <button className = "btn dropdown btn-secondary" value = {club.ClubName} aria-controls={club.ClubName} data-toggle="collapse" data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} onClick ={this.showMembers}> View Members </button>
                         </td>
                     </tr>
-                    <tr>
-                        <td style = {{borderTop : '0px'}} colspan="5" class = "accordion-group">
-                            <div id = {club.ClubName.replace(/ +/g, "").trim()} aria-labelledby={club.ClubName} class="collapse indent">
+                    <tr id = "accordion">
+                        <td data-parent = "#accordion" style = {{borderTop : '0px'}} colSpan="5">
+                            <div id = {club.ClubName.replace(/ +/g, "").trim()} aria-labelledby={club.ClubName} className ="collapse">
                                 <b> Members</b>
                                 {this.state.clubMembas.length > 0 ?
                                     this.state.clubMembas.map(member=>(
-                                        <td style = {{borderTop : '0px'}}> {member.name} </td>
+                                        <div key = {member} style = {{borderTop : '0px'}}> {member.name} </div>
                                     ))
                                     : 
                                     <p> No Members </p> 
