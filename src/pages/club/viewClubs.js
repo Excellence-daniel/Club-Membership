@@ -69,6 +69,7 @@ deleteClub = async (e) => {
             const membersMail = memberMail.email
             const getRespUsers =  await db.collection('Users').where("Email","==",membersMail).get()
             getRespUsers.forEach(async (snapshot)=>{
+                console.log("HEy")
                 let userID = snapshot.id
                 let membersClubJoined = snapshot.data().ClubsJoined
                 let checkClubIndex = membersClubJoined.findIndex(idx => idx.Club === clubNamee)
