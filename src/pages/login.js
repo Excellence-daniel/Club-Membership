@@ -16,11 +16,11 @@ class LoginUser extends Component {
     }
 
     handleEmailInput = (e) => {
-            this.setState({email : e.target.value})
+            this.setState({email : e.target.value.trim()})
     } 
 
     handlePasswordInput = (e) => {        
-            this.setState({password : e.target.value})
+            this.setState({password : e.target.value.trim()})
     } 
 
     login = async (e) => {

@@ -17,13 +17,14 @@ class ViewClubs extends Component {
             email : '',
             memberLimit : null, 
             clubsjoinned : [], 
-            redirect : false
+            redirect : false, 
+            clubMembas : []
         }
     }
 
 componentDidMount=async()=>{        
-    const loader = document.getElementById('loader').style
-    loader.display = 'block'
+    const loader = document.getElementById('loader')
+    loader.style.display = 'block'
     const allClubs =  [] //an object that take all clubs of the user
     let allClubsID = [] //an array to take the ids of the clubs respectively
     let clubsjjoined = []
@@ -49,7 +50,7 @@ componentDidMount=async()=>{
         }
     })
 
-    loader.display = 'none'
+    loader.style.display = 'none'
 }
 
 deleteClub = async (e) => {
@@ -142,8 +143,13 @@ leaveClub = async (e) => {
     }        
 }
 
-showMembers = () => {
-    alert("HEUY THERE")
+showMembers = async (e) =>{
+    var cllubname = e.target.id
+    const getClubMembers = await db.collection('Clubs').where("ClubName", '==',cllubname).get()
+    getClubMembers.forEach((snapshot)=>{
+    const memberrrs = snapshot.data().Members
+    this.setState({clubMembas : memberrrs})
+    })
 }
 
 joinedClub = () => {
@@ -165,22 +171,41 @@ joinedClub = () => {
                     No Clubs Available 
             </div>  
 }
-createdClubs = () => {
+createdClubs =  () => {
+    console.log("JJJDJDJJD", this.state.clubs, this.state.clubsID)
     return this.state.clubs.length > 0 ? 
             this.state.clubs.map((club, id) => (
-                <tr key = {id}>
-                    <td> {club.ClubName} </td>
-                    <td> {club.ClubType} </td>
-                    <td> {club.AdminEmail} </td> 
-                    <td> {club.MemberLimit} </td> 
-                    <td> 
-                        <Link to = {{pathname : "/club/editClub", state : ({id: this.state.clubsID[id]})}}>      
-                            <button className = "btn btn-primary"> EDIT </button>
-                        </Link>
-                                &nbsp;  &nbsp;
-                        <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> DELETE </button>
-                    </td>
-                </tr>                    
+               <tbody>
+                    <tr key = {id}>
+                        <td onClick = {this.showMembers} id = {club.ClubName} data-toggle="collapse" data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} style = {{cursor : 'pointer'}}> {club.ClubName} </td>
+                        {/* .replace(/ +/g, "") removes white space between the string  */}
+                        <td> {club.ClubType} </td>
+                        <td> {club.AdminEmail} </td> 
+                        <td> {club.MemberLimit} </td> 
+                        <td> 
+                            <Link to = {{pathname : "/club/editClub", state : ({id: this.state.clubsID[id]})}}>      
+                                <button className = "btn btn-primary"> EDIT </button>
+                            </Link>
+                                    &nbsp;  &nbsp;
+                            <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> DELETE </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style = {{borderTop : '0px'}} colspan="5">
+                            <div id = {club.ClubName.replace(/ +/g, "").trim()} class="collapse">
+                            <b> Members </b>
+                            {this.state.clubMembas.length > 0 ?
+                                this.state.clubMembas.map(member=>(
+                                    <td style = {{borderTop : '0px'}}> {member.name} </td>
+                                ))
+                                : 
+                                <p> No Members </p> }
+                            
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>     
+                                 
             )) :
                 <div style = {{fontSize : '15px'}}>
                     No Clubs Available 
@@ -234,13 +259,12 @@ render(){
                                 <th> Member Limit </th>
                             </tr>
                         </thead>
-                        <tbody>
                             {this.createdClubs()}
-                        </tbody>
                     </table> 
                 </div>
             </div>
             <div className = "col-md-2">
+            <button onClick = {this.showMembers}> SHOW MEMBERS </button>
             </div>            
         </div>
     )

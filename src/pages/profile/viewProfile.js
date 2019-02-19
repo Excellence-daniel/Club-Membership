@@ -52,15 +52,15 @@ class ViewProfile extends Component{
     }
 
     changeName = (e) => {
-        this.setState({name : e.target.value})
+        this.setState({name : e.target.value.trim()})
     }
 
     changeAddress = (e) =>{
-        this.setState({address : e.target.value})
+        this.setState({address : e.target.value.trim()})
     }
 
     changePhone = (e) => {
-        this.setState({phone : e.target.value})
+        this.setState({phone : e.target.value.trim()})
     }
 
     updateProfile = async () =>{

@@ -18,23 +18,23 @@ import Header from './header'
      }
 
      handleNameInput = (e) =>{
-        this.setState({name : e.target.value})
+        this.setState({name : e.target.value.trim()})
      }
 
      handleAddressInput = (e) =>{
-        this.setState({address : e.target.value})
+        this.setState({address : e.target.value.trim()})
      }
 
      handlePhoneNumber = (e) =>{
-        this.setState({phone : e.target.value})
+        this.setState({phone : e.target.value.trim()})
      }
 
      handleEmailInput = (e) => {
-        this.setState({email : e.target.value})
+        this.setState({email : e.target.value.trim()})
      }
 
      handlePasswordInput = (e) =>{
-        this.setState({password : e.target.value})
+        this.setState({password : e.target.value.trim()})
      }
 
      signup = async (e) => {

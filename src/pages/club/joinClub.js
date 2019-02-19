@@ -21,6 +21,7 @@ class JoinClub extends Component{
         console.log("DSFHNJHJFSK" , parse(this.props.location.search).name)
         var getURLVal = parse(this.props.location.search)
         this.setState({email : getURLVal.email, adminEmail : getURLVal.adminEmail, clubname :getURLVal.clubname, clubtype : getURLVal.clubtype}) 
+        console.log(getURLVal.clubtype)
     }
 
     acceptInvite = async () => {
@@ -64,7 +65,8 @@ class JoinClub extends Component{
                         const joinedClubs = user.ClubsJoined    //get all the clubs the user has joined
                         joinedClubs.push(newClub)   //push the new club into that array
                         console.log(userId)
-                        db.collection('Users').doc(userId)
+                        console.log(joinedClubs)
+                        db.collection('Users').doc(userId.trim())
                         .update({
                             ClubsJoined : joinedClubs    //update the clubs joined array in the 'Users' collection of the user 
                         })

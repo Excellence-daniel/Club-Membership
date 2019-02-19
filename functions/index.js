@@ -56,7 +56,6 @@ exports.firestoreInviteEmail = functions.firestore
         const currentMemberEmail = allMembers[currentMemberID].email
         console.log("NEW EMAIL", currentMemberEmail)
         console.log("NEW DATA ID", currentMemberID)
-        const url = `http://localhost:3000/club/joinClub?email=${currentMemberEmail}&adminEmail=${adminEmail}&clubname=${clubName}&clubtype=${clubtype}`
         if (newData) {
             const msg = {
                 to: currentMemberEmail,
@@ -66,7 +65,7 @@ exports.firestoreInviteEmail = functions.firestore
                             <strong> Hey. An invite was sent to you by ${adminEmail} to join a club on our app. Click on the link below to view.  </strong>
                                 <br> <br>
                             <center>
-                                <a href = ${url}><button> View Invite Message </button></a>
+                                <a href = http://localhost:3000/club/joinClub?email=${currentMemberEmail}&adminEmail=${adminEmail}&clubtype=${clubtype}&clubname=${clubName} ><button> View Invite Message </button></a>
                             </center>
                         `,
             }

@@ -35,15 +35,15 @@ class EditClub extends Component{
     }
 
     handleChangeClubName = (e) => {
-        this.setState({clubname : e.target.value})
+        this.setState({clubname : e.target.value.trim()})
     }
 
     handleChangeClubType = (e) =>{
-        this.setState({clubtype : e.target.value})
+        this.setState({clubtype : e.target.value.trim()})
     }
 
     handleMemberLimit = (e) => {
-        this.setState({membersLimit : e.target.value})
+        this.setState({membersLimit : e.target.value.trim()})
     }
 
     updateClubDetails = async () =>{

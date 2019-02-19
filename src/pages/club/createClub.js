@@ -24,21 +24,21 @@ class CreateClub extends Component{
         loader.display = 'block'  //activate loader
         const user =  fire.auth().currentUser
         if (user){
-        this.setState({email : user.email}) //set email on load of the page 
+        this.setState({email : user.email.trim()}) //set email on load of the page 
         }
         loader.display = 'none'
     }
 
     handleClubName = (e) => {
-        this.setState({clubName : e.target.value})
+        this.setState({clubName : e.target.value.trim()})
     }
 
     handleClubType = (e) => {
-        this.setState({clubType : e.target.value})
+        this.setState({clubType : e.target.value.trim()})
     }
 
     handleMemberLimit = (e) => {
-        this.setState({memberLimit : e.target.value})
+        this.setState({memberLimit : e.target.value.trim()})
     }
 
     onCreateClub = async (e) => {

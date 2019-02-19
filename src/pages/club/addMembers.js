@@ -52,7 +52,7 @@ class AddMembers extends Component {
 	}
 
 	inviteMembers = async () => {
-		const loader = '<img src ="../img/loader.gif" style = "width : 10%"/>'
+		const loader = '<img src ="../img/loader.gif" style = "width : 7%"/>'
 		const teeext = 'Send Invite'
 		var actionn = document.getElementById('actionn')
 		actionn.innerHTML = loader 
