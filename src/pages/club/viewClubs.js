@@ -144,12 +144,14 @@ leaveClub = async (e) => {
 }
 
 showMembers = async (e) =>{
-    var cllubname = e.target.id
+    var cllubname = e.target.value
+    console.log(cllubname)
     const getClubMembers = await db.collection('Clubs').where("ClubName", '==',cllubname).get()
     getClubMembers.forEach((snapshot)=>{
     const memberrrs = snapshot.data().Members
+    console.log("MMEMEMEME", memberrrs)
     this.setState({clubMembas : memberrrs})
-    })
+    })   
 }
 
 joinedClub = () => {
@@ -171,36 +173,37 @@ joinedClub = () => {
                     No Clubs Available 
             </div>  
 }
-createdClubs =  () => {
-    console.log("JJJDJDJJD", this.state.clubs, this.state.clubsID)
+createdClubs = () => {
     return this.state.clubs.length > 0 ? 
             this.state.clubs.map((club, id) => (
                <tbody>
                     <tr key = {id}>
-                        <td onClick = {this.showMembers} id = {club.ClubName} data-toggle="collapse" data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} style = {{cursor : 'pointer'}}> {club.ClubName} </td>
+                        <td style = {{cursor : 'pointer'}}> {club.ClubName} </td>
                         {/* .replace(/ +/g, "") removes white space between the string  */}
                         <td> {club.ClubType} </td>
                         <td> {club.AdminEmail} </td> 
                         <td> {club.MemberLimit} </td> 
-                        <td> 
+                        <td id = "accordion"> 
                             <Link to = {{pathname : "/club/editClub", state : ({id: this.state.clubsID[id]})}}>      
-                                <button className = "btn btn-primary"> EDIT </button>
+                                <button className = "btn btn-primary"> Edit </button>
                             </Link>
                                     &nbsp;  &nbsp;
-                            <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> DELETE </button>
+                            <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> Delete</button>
+                            &nbsp;  &nbsp;
+                            <button className = "btn dropdown btn-secondary" value = {club.ClubName} data-toggle="collapse" data-parent = "#accordion" data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} onClick ={this.showMembers}> View Members </button>
                         </td>
                     </tr>
                     <tr>
-                        <td style = {{borderTop : '0px'}} colspan="5">
-                            <div id = {club.ClubName.replace(/ +/g, "").trim()} class="collapse">
-                            <b> Members </b>
-                            {this.state.clubMembas.length > 0 ?
-                                this.state.clubMembas.map(member=>(
-                                    <td style = {{borderTop : '0px'}}> {member.name} </td>
-                                ))
-                                : 
-                                <p> No Members </p> }
-                            
+                        <td style = {{borderTop : '0px'}} colspan="5" class = "accordion-group">
+                            <div id = {club.ClubName.replace(/ +/g, "").trim()} aria-labelledby={club.ClubName} class="collapse indent">
+                                <b> Members</b>
+                                {this.state.clubMembas.length > 0 ?
+                                    this.state.clubMembas.map(member=>(
+                                        <td style = {{borderTop : '0px'}}> {member.name} </td>
+                                    ))
+                                    : 
+                                    <p> No Members </p> 
+                                } 
                             </div>
                         </td>
                     </tr>
@@ -263,9 +266,7 @@ render(){
                     </table> 
                 </div>
             </div>
-            <div className = "col-md-2">
-            <button onClick = {this.showMembers}> SHOW MEMBERS </button>
-            </div>            
+            <div className = "col-md-2"></div>            
         </div>
     )
 }
