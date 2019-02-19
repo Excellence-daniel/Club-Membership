@@ -16,7 +16,7 @@ class ViewClubs extends Component {
             clubType : '',
             email : '',
             memberLimit : null, 
-            clubsjoinned : [], 
+            clubsjoinned : [[]], 
             redirect : false, 
             clubMembas : []
         }
@@ -155,9 +155,9 @@ showMembers = async (e) =>{
 }
 
 joinedClub = () => {
-    console.log(this.state.clubsjoinned)
+    console.log(this.state.clubsjoinned[0])
     console.log("CLUBS JOINED ", this.state.clubsjoinned.length)
-    return  this.state.clubsjoinned.length > 0 ? 
+    return  this.state.clubsjoinned[0].length > 0 ? 
         this.state.clubsjoinned[0].map((club, id) => (
             <tr key = {id}>
                 <td> {club.Club} </td>
@@ -176,8 +176,8 @@ joinedClub = () => {
 createdClubs = () => {
     return this.state.clubs.length > 0 ? 
             this.state.clubs.map((club, id) => (
-               <tbody>
-                    <tr key = {id}>
+               <tbody key = {id}>
+                    <tr style= {{background : '#e4f1e4'}} key = {id}>
                         <td style = {{cursor : 'pointer'}}> {club.ClubName} </td>
                         {/* .replace(/ +/g, "") removes white space between the string  */}
                         <td> {club.ClubType} </td>
@@ -190,7 +190,12 @@ createdClubs = () => {
                                     &nbsp;  &nbsp;
                             <button className = "btn btn-danger" id = {this.state.clubsID[id]} value = {club.ClubName} onClick ={this.deleteClub}> Delete</button>
                             &nbsp;  &nbsp;
-                            <button className = "btn dropdown btn-secondary" value = {club.ClubName} aria-controls={club.ClubName} data-toggle="collapse" data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} onClick ={this.showMembers}> View Members </button>
+                            <button className = "btn btn-outline-secondary" value = {club.ClubName} aria-controls={club.ClubName} 
+                                    data-toggle="collapse"  data-target= {"#"+club.ClubName.replace(/ +/g, "").trim()} onClick ={this.showMembers}> 
+
+                                View Members
+
+                            </button>
                         </td>
                     </tr>
                     <tr id = "accordion">
@@ -198,8 +203,8 @@ createdClubs = () => {
                             <div id = {club.ClubName.replace(/ +/g, "").trim()} aria-labelledby={club.ClubName} className ="collapse">
                                 <b> Members</b>
                                 {this.state.clubMembas.length > 0 ?
-                                    this.state.clubMembas.map(member=>(
-                                        <div key = {member} style = {{borderTop : '0px'}}> {member.name} </div>
+                                    this.state.clubMembas.map((member,id)=>(
+                                        <div key = {id} style = {{borderTop : '0px'}}> {member.name} </div>
                                     ))
                                     : 
                                     <p> No Members </p> 

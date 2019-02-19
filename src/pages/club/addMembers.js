@@ -91,11 +91,11 @@ class AddMembers extends Component {
 			return <Redirect to = "/"/>
 		}
 	   return (
-			<div class = "col-md-12"> 
-				<div class = "col-md-12">
+			<div className = "col-md-12"> 
+				<div className = "col-md-12">
 					<Header/>
 				</div>
-				<div class = "col-md-12">
+				<div className = "col-md-12">
 					<div className = "col-md-4"></div>
 					<div className = "col-md-4 mx-auto" style = {{fontSize : '18px'}}>
 						<center> 
@@ -104,14 +104,14 @@ class AddMembers extends Component {
 								Invite : 
 							<input type = "email" onChange = {this.emailToInvite} class = "form-control"/>
 								to 
-							<select class = "form-control" onChange = {this.pickClub}>
+							<select className = "form-control" onChange = {this.pickClub}>
 								<option value = ""> SELECT A CLUB </option>
 								{this.state.clubs.map(club => (
 									<option key ={club} value ={club}> {club} </option>
 								))}
 							</select>
 							<br/>
-							<div><button class = "btn btn-danger btn-block" id = "actionn" style = {{padding : '20px'}} onClick = {this.inviteMembers}> Send Invite </button></div>
+							<div><button className = "btn btn-danger btn-block" id = "actionn" style = {{padding : '15px'}} onClick = {this.inviteMembers}> Send Invite </button></div>
 						</center>
 					</div>
 					<div className = "col-md-4"></div>
