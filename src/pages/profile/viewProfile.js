@@ -34,7 +34,7 @@ class ViewProfile extends Component{
                                 name  : prof.Name, 
                                 email : prof.Email, 
                                 address : prof.Address, 
-                                phone : prof.Phone, 
+                                phone : prof.PhoneNumber, 
                                 id : doc.id })
                 })
             }).catch((error) => {

@@ -23,8 +23,8 @@ class ViewClubs extends Component {
     }
 
 componentDidMount=async()=>{        
-    const loader = document.getElementById('loader')
-    loader.style.display = 'block'
+    let loader = document.getElementById('loader');
+    loader.style.display = "block"
     const allClubs =  [] //an object that take all clubs of the user
     let allClubsID = [] //an array to take the ids of the clubs respectively
     let clubsjjoined = []
@@ -43,18 +43,20 @@ componentDidMount=async()=>{
             await clubsjoinedArr.forEach(querySnapshot =>{
                 clubsjjoined.push(querySnapshot.data().ClubsJoined)
             })
-            this.setState({clubsjoinned : clubsjjoined})
+            if (clubsjjoined.length > 0){
+                this.setState({clubsjoinned : clubsjjoined});
+            } 
+            loader.style.display = "none"
             console.log("CLUBS JOINED ---23", clubsjjoined)
             console.log("CLUBS JOINED ---24", clubsjjoined.length)
             console.log("CLUBS JOINED ---25", clubsjjoined[0])
         }
     })
-
-    loader.style.display = 'none'
 }
 
 deleteClub = async (e) => {
     var id = e.target.id
+    console.log(id)
     var clubNamee = e.target.value
     const loader = document.getElementById('loader').style
     loader.display = 'block'
@@ -62,44 +64,57 @@ deleteClub = async (e) => {
     if (deleteCClub === true){
         console.log(clubNamee, "SMFKE")
         var getClubDets = await db.collection('Clubs').doc(id).get()
-        console.log(getClubDets.data().Members)
         const clubMembers = getClubDets.data().Members
-        clubMembers.forEach( async (memberMail) => {
-            console.log(memberMail.email)
-            const membersMail = memberMail.email
-            const getRespUsers =  await db.collection('Users').where("Email","==",membersMail).get()
-            getRespUsers.forEach(async (snapshot)=>{
-                console.log("HEy")
-                let userID = snapshot.id
-                let membersClubJoined = snapshot.data().ClubsJoined
-                let checkClubIndex = membersClubJoined.findIndex(idx => idx.Club === clubNamee)
-                membersClubJoined.splice(checkClubIndex, 1)
-                await db.collection('Users').doc(userID).update({
-                    ClubsJoined : membersClubJoined
-                })
-                .then(()=>{
-                    db.collection('Clubs').doc(id).delete()  //use club detail ID to delete from Clubs collection
-                    .then(() => {
-                        alert("Club Deleted!")
-                        this.setState({redirect : true})
+        if (clubMembers > 0){
+            clubMembers.forEach( async (memberMail) => {
+                console.log(memberMail.email)
+                const membersMail = memberMail.email
+                const getRespUsers =  await db.collection('Users').where("Email","==",membersMail).get()
+                getRespUsers.forEach(async (snapshot)=>{
+                    console.log("HEy")
+                    let userID = snapshot.id
+                    let membersClubJoined = snapshot.data().ClubsJoined
+                    let checkClubIndex = membersClubJoined.findIndex(idx => idx.Club === clubNamee)
+                    membersClubJoined.splice(checkClubIndex, 1)
+                    await db.collection('Users').doc(userID).update({
+                        ClubsJoined : membersClubJoined
                     })
-                    .catch((error) => {
+                    .then(()=>{
+                        db.collection('Clubs').doc(id).delete()  //use club detail ID to delete from Clubs collection
+                        .then(() => {
+                            alert("Club Deleted!")
+                            this.setState({redirect : true})
+                        })
+                        .catch((error) => {
+                            alert("Error. Try Again!")
+                            console.log(error, "1")
+                        })
+                    })
+                    .catch((error)=>{
                         alert("Error. Try Again!")
-                        console.log(error, "1")
+                        console.log(error, "2")
                     })
                 })
-                .catch((error)=>{
-                    alert("Error. Try Again!")
-                    console.log(error, "2")
-                })
+                // let checkClubIndex = memerMai
             })
-            // let checkClubIndex = memerMai
-        })  
+    }else {
+        db.collection('Clubs').doc(id).delete()
+        .then(()=>{
+            alert('Club deleted')
+            this.setState({redirect : true})
+        })
+        .catch((err)=>{
+            console.log(err.code, err.message)
+            alert("Error. Try Again!")
+        })
     }
+}
     loader.display = 'none'
 }
 
 leaveClub = async (e) => {
+    const loader = document.getElementById('loader').style
+    loader.display = 'block'
     var id = e.target.id
     var oldClubsJoined,clubMembers, clubInvites = []
     var userProfileId, clubIId;
@@ -137,10 +152,19 @@ leaveClub = async (e) => {
                 Members : clubMembers,       //update members list 
                 Invites : clubInvites        //update invites array
             }).then(()=> {
-                alert("You have left the club!")
+                alert("You have left the club!");
+                loader.display = 'none';
+            })
+            .catch((err)=>{
+                console.log(err.code, err.message);
+                alert("Error. Try again!")
             })
             this.setState({redirect : true})
-        })        
+        }) 
+        .catch((err)=>{
+            console.log(err.code, err.message);
+            alert("Error. Try Again!")
+        })       
     }        
 }
 
@@ -156,9 +180,10 @@ showMembers = async (e) =>{
 }
 
 joinedClub = () => {
+    const clubsjjoinedd = this.state.clubsjoinned;
     console.log(this.state.clubsjoinned[0])
-    console.log("CLUBS JOINED ", this.state.clubsjoinned.length)
-    return  this.state.clubsjoinned[0].length > 0 ? 
+    // console.log("CLUBS JOINED ", this.state.clubsjoinned.length)
+    return clubsjjoinedd[0].length > 0 ? 
         this.state.clubsjoinned[0].map((club, id) => (
             <tr key = {id}>
                 <td> {club.Club} </td>
@@ -248,15 +273,9 @@ render(){
                 </table>
 
 
-                        {/* Created Clubs */}
-        <br/>
-            <div>
-                <center>
-                    <img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '5%'}} id = "loader"/>
-                </center>
-            </div>
-        <br/>
-
+           <br/>          {/* Created Clubs */}
+            <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '5%'}} id = "loader"/></center></div>
+            <br/>
                 <div>
                     <h3> Created Clubs </h3>
                     <table className = "table"> 

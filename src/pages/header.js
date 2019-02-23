@@ -39,10 +39,12 @@ componentDidMount =async () => {
         } else {
             this.setState({isLoggedIn : true})
             console.log("User is in and verfied")
+            localStorage.setItem("IsUserLoggedIn", true)
         }
     } else{
         console.log("User is out.")
         this.setState({isLoggedIn : false})
+        localStorage.setItem("IsUserLoggedIn", false)
      }
 }
 
@@ -50,6 +52,7 @@ logOut =()=> {
     fire.auth().signOut()  
     alert('Logged Out')
     this.setState({redirect : true, loggedOut : true, isLoggedIn :false})
+    localStorage.setItem("IsUserLoggedIn", false);
 }
 
 render(){   
@@ -58,8 +61,11 @@ render(){
     }  
 
     console.log("LoggedIn: " ,this.state.isLoggedIn)
+    console.log("IS USER LOGGED IN", localStorage.getItem("IsUserLoggedIn"))
+    const userLoginStatus = JSON.parse(localStorage.getItem("IsUserLoggedIn"))
+    console.log(userLoginStatus)
     
-    if(this.state.isLoggedIn === false){
+    if(userLoginStatus === false){
         return (
             <div className = "col-md-12">
                 <div className = "col-md-12" > 

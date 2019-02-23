@@ -17,7 +17,7 @@ class AddMembers extends Component {
 	}
 
 	componentDidMount= async()=>{
-		const loader = '<img src ="../img/loader.gif" style = "width : 8%"/>'
+		const loader = '<img src ="../img/loader.gif" style = "width : 5%"/>'
 		const teeext = 'Send Invite'
 		var actionn = document.getElementById('actionn')
 		actionn.innerHTML = loader 
@@ -111,7 +111,7 @@ class AddMembers extends Component {
 								))}
 							</select>
 							<br/>
-							<div><button className = "btn btn-danger btn-block" id = "actionn" style = {{padding : '15px'}} onClick = {this.inviteMembers}> Send Invite </button></div>
+							<div><button className = "btn btn-danger btn-block" id = "actionn" onClick = {this.inviteMembers}> Send Invite </button></div>
 						</center>
 					</div>
 					<div className = "col-md-4"></div>

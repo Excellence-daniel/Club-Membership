@@ -40,7 +40,7 @@ import Header from './header'
      signup = async (e) => {
         e.preventDefault();
         let actionn = document.getElementById('actionn')
-        let loader = `<img src = '../img/loader.gif' style = 'width : 10%'/>`
+        let loader = `<img src = '../img/loader.gif' style = 'width : 5%'/>`
         actionn.innerHTML = loader
         if(this.state.name === '' || this.state.email === '' || this.state.address === '' || this.state.phone === '' || this.state.password === '' ){
             alert('Fill all fields.')
@@ -51,32 +51,29 @@ import Header from './header'
         .then(function(data){
             let authsuccess = data.additionalUserInfo.isNewUser  //if user email does not exist, he is a a newUser i.e authSuccess = true
             if (authsuccess === true){
-                var user = fire.auth().currentUser  //get the current user
-                 var sendEmail = user.sendEmailVerification() //send the user an email for verification
-                 if (sendEmail){
-                            db.collection('Users').add({ //add these to database
-                                Name : self.state.name, 
-                                Email : self.state.email,
-                                Address : self.state.address,
-                                Phone : self.state.phone,
-                                Password : self.state.password, 
-                                Admin : false, 
-                                EmailVerified : false,
-                                ClubsJoined : []
-                             }).then(function(data){
-                                 console.log("SIGNUP DATA ", data)
-                                 if (data){
-                                    self.setState({redirect : true})                                    
-                                    localStorage.setItem("Email",self.state.email) //save email
-                                    alert('User Registered Successfully. Verify your email')
-                                    actionn.textContent = 'Submit Form'
-                                 }
-                             }).catch(function(error){
-                                    alert(error.message + ". Please try again") 
-                                    actionn.textContent = 'Submit Form'
-                                    //should delete user from auth. Do!!
-                             })
-          }
+                    db.collection('Users').add({ //add these to database
+                        Name : self.state.name, 
+                        Email : self.state.email,
+                        Address : self.state.address,
+                        PhoneNumber : self.state.phone,
+                        Password : self.state.password, 
+                        Admin : false, 
+                        EmailVerified : false,
+                        ClubsJoined : []
+                        }).then(function(data){
+                            console.log("SIGNUP DATA ", data)
+                            if (data){
+                            self.setState({redirect : true})                                    
+                            localStorage.setItem("Email",self.state.email) //save email
+                            alert('User Registered Successfully. Verify your email')
+                            actionn.textContent = 'Submit Form'
+                            }
+                        }).catch(function(error){
+                            alert(error.message + ". Please try again") 
+                            actionn.textContent = 'Submit Form'
+                            //should delete user from auth. Do!!
+                        })
+          
         }}).catch(function(error){
             console.log("SUCCESS", false)
             console.log("error", error.message)
@@ -126,7 +123,7 @@ import Header from './header'
                                 <input type = "password" onChange = {this.handlePasswordInput} className = "form-control"/>
                             </p>
 
-                            <button className = "btn btn-block btn-secondary" id = "actionn" style = {{padding : '15px'}} onClick ={this.signup}> Submit Form </button>
+                            <button className = "btn btn-block btn-secondary" id = "actionn" onClick ={this.signup}> Submit Form </button>
                         </div>
                 </div>
                 <div className = "col-md-4"></div>

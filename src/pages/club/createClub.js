@@ -20,13 +20,14 @@ class CreateClub extends Component{
     }
 
     componentDidMount(){
-        const loader = document.getElementById('loader').style
-        loader.display = 'block'  //activate loader
+        const loader = document.getElementById('loader')
+        const imgLoader = "<img src = '../img/loader.gif' width = '5%'/>"
+        loader.innerHTML = imgLoader
         const user =  fire.auth().currentUser
         if (user){
         this.setState({email : user.email.trim()}) //set email on load of the page 
         }
-        loader.display = 'none'
+        loader.textContent = "Create Club"
     }
 
     handleClubName = (e) => {
@@ -43,8 +44,8 @@ class CreateClub extends Component{
 
     onCreateClub = async (e) => {
         e.preventDefault();
-        let actionn = document.getElementById('actionn')
-        let loader = `<img src = '../img/loader.gif' style = 'width : 10%'/>`
+        let actionn = document.getElementById('loader')
+        let loader = `<img src = '../img/loader.gif' style = 'width : 5%'/>`
         actionn.innerHTML = loader
         if (this.state.email === '' || this.state.clubName === '' || this.state.clubType === '' || this.state.memberLimit === ''){
             alert ("Fill in all fields"); 
@@ -126,9 +127,8 @@ class CreateClub extends Component{
                                 <label> Members Limit </label>
                                 <input type = "number" onChange ={this.handleMemberLimit} className = "form-control"/>
                             </p>
-                            <button onClick = {this.onCreateClub} className = "btn btn-success btn-block" id = "actionn" style = {{padding : '15px'}}> Create Club </button>
+                            <button onClick = {this.onCreateClub} className = "btn btn-success btn-block" id = "loader"> Create Club </button>
                         </form>
-                    <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '20%'}} id = "loader"/></center></div>
                     </div>                                                
                     <div className = "col-md-4"></div>
                 </div>

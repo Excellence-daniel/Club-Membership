@@ -25,7 +25,7 @@ class JoinClub extends Component{
     }
 
     acceptInvite = async () => {
-        // fire.auth().signOut()  
+        await fire.auth().signOut();  
         var loader = document.getElementById('loader')
         const img = '<img src = "../img/loader.gif" style = "width : 7%"/>' 
         const text = "Accept Invite"
@@ -40,6 +40,7 @@ class JoinClub extends Component{
         const isClubDataPresent = getClubData.docs
         if(!(isClubDataPresent.length > 0)){
             alert('Club does not exist!')
+            window.close()
             loader.textContent = text
         }else{
             console.log(getClubData.docs)

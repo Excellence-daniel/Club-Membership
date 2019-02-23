@@ -18,8 +18,9 @@ class EditClub extends Component{
         }
     }
     componentDidMount = async(props)=>{
-        const loader = document.getElementById('loader').style      //start loader 
-        loader.display = 'block'
+        const loader = document.getElementById('actionn')  
+        const imgloader = '<img src = "../img/loader.gif" style = "width : 5%"/>'
+        loader.innerHTML = imgloader
         const clubId = this.props.location.state.id     //get the ID sent from the viewClubs page
         const clubb = await db.collection('Clubs').doc(clubId).get()    //get data with the clubID as ref
         const clubData = clubb.data()   //get data
@@ -31,7 +32,7 @@ class EditClub extends Component{
                     clubtype : clubData.ClubType, 
                     membersLimit : clubData.MemberLimit
                     })                                      //set form value to equal the data fetched 
-        loader.display = 'none'
+        loader.textContent = 'Save Changes'
     }
 
     handleChangeClubName = (e) => {
@@ -48,8 +49,8 @@ class EditClub extends Component{
 
     updateClubDetails = async () =>{
         var actionn = document.getElementById('actionn')
-        const loader = '<img src = "../img/loader.gif" style = "width : 10%"/>'
-        const teeext = 'Update Club'
+        const loader = '<img src = "../img/loader.gif" style = "width : 5%"/>'
+        const teeext = 'Save Changes'
         actionn.innerHTML = loader
         await db.collection('Clubs').doc(this.state.id)
         .update({
@@ -105,9 +106,8 @@ class EditClub extends Component{
                     </p>
                     
                     <p>
-                        <button class = "btn btn-success btn-block" id ="actionn" style = {{padding: '20px'}} onClick = {this.updateClubDetails}> SAVE </button>
+                        <button class = "btn btn-success btn-block" id ="actionn" onClick = {this.updateClubDetails}> SAVE </button>
                     </p>
-                    <div className = ""><center><img src = "../img/loader.gif" alt = "loader" style = {{display : 'none', width: '10%'}} id = "loader"/></center></div>
                </div>
 
                <div className = "col-md-4"></div>
