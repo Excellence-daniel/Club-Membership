@@ -69,7 +69,7 @@ class ViewProfile extends Component{
            Name : this.state.name, 
            Email : this.state.email,
            Address : this.state.address,
-           Phone : this.state.phone
+           PhoneNumber : this.state.phone
        }).then((u) => {
         this.setState({editBtn : false, textBoxDisable : true});
         alert("Updated!")
