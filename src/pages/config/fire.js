@@ -1,12 +1,12 @@
 import firebase from 'firebase'
 var config = {
-    apiKey: "AIzaSyAFWlHfRZVyQcw-lj6chPHrhmNqJks4uGo",
-    authDomain: "club-membership-190d2.firebaseapp.com",
-    databaseURL: "https://club-membership-190d2.firebaseio.com",
-    projectId: "club-membership-190d2",
-    storageBucket: "club-membership-190d2.appspot.com",
-    messagingSenderId: "1089021916226"
-  };
+  apiKey: "AIzaSyBmlRfFT3kXI2PrhP345AYsQFdeAYJL0po",
+  authDomain: "club-membership-app.firebaseapp.com",
+  databaseURL: "https://club-membership-app.firebaseio.com",
+  projectId: "club-membership-app",
+  storageBucket: "club-membership-app.appspot.com",
+  messagingSenderId: "212750426539"
+};
 
   export const fire = firebase.initializeApp(config)
   export const db = firebase.firestore()

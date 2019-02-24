@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { parse } from 'query-string'
 
-import { db } from './config/fire'
+import { db, fire } from './config/fire'
 
 class VerifyEmail extends Component {
     constructor(props) {
@@ -15,6 +15,7 @@ class VerifyEmail extends Component {
     componentDidMount = async () => {
         var getURLVal = parse(this.props.location.search)
         const email = getURLVal.email
+        const user = fire.auth().currentUser
         if (email) {
             let userEmailVerified, userID;
             const getUserCollection = await db.collection('Users').where("Email", "==", email).get()
@@ -28,7 +29,10 @@ class VerifyEmail extends Component {
                 db.collection('Users').doc(userID)
                     .update({
                         EmailVerified: true
-                    }).then((u) => {
+                    }).then(async (u) => {
+                        await user.updateProfile({
+                            emailVerified : true
+                        })
                         alert("Verified!")
                     }).catch((error) => {
                         console.log('error', error);

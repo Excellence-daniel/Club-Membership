@@ -3,9 +3,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-const SENDGRID_API_KEY = functions.config().sendgrid.key;
-
 const sgMail = require('@sendgrid/mail');
+const SENDGRID_API_KEY = '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';
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 //function to validate users and verify their emails
@@ -65,7 +64,7 @@ exports.firestoreInviteEmail = functions.firestore
                             <strong> Hey. An invite was sent to you by ${adminEmail} to join a club on our app. Click on the link below to view.  </strong>
                                 <br> <br>
                             <center>
-                                <a href = http://localhost:3000/club/joinClub?email=${currentMemberEmail}&adminEmail=${adminEmail}&clubtype=${clubtype}&clubname=${clubName} ><button> View Invite Message </button></a>
+                                <a href = http://localhost:3000/club/joinClub?clubname=${clubName}&email=${currentMemberEmail}&clubtype=${clubtype}&clubname=${clubName}&adminEmail=${adminEmail}&check={clubmember} ><button> View Invite Message </button></a>
                             </center>
                         `,
             }
