@@ -3,8 +3,12 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+//const sgMail = require('@sendgrid/mail');
+//const SENDGRID_API_KEY = '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';
+
+const SENDGRID_API_KEY = functions.config().sendgrid.key;
+
 const sgMail = require('@sendgrid/mail');
-const SENDGRID_API_KEY = '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';
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 //function to validate users and verify their emails
