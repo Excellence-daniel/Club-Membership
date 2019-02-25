@@ -45,7 +45,7 @@ class LoginUser extends Component {
             } else {
                 fire.auth().signInWithEmailAndPassword(email, password).then((u)=> {
                 console.log(u , "SUCCESS");
-                alert("You are logged in");
+                alert("Log in Successful.");
                 localStorage.setItem("IsUserLoggedIn", true)
                 this.setState({redirect : true})            
                 }).catch((error)=>{
