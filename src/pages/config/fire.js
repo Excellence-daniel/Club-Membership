@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 var config = {
-  apiKey: "AIzaSyBmlRfFT3kXI2PrhP345AYsQFdeAYJL0po",
+
   authDomain: "club-membership-app.firebaseapp.com",
   databaseURL: "https://club-membership-app.firebaseio.com",
   projectId: "club-membership-app",
